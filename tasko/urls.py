@@ -16,8 +16,18 @@ Including another URLconf
 """
 
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from task import views
+from django.http import HttpResponse
+
+
+def home(request):
+    return HttpResponse('<h1>Welcome to Tasko!</h1><p>Go to <a href="/tasks/">Task List</a>.</p>')
+
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path('admin/', admin.site.urls),
+    path('tasks/', include('task.urls')),  # Include task app URLs
+    path('', home),  # Custom view for root URL
 ]
+
