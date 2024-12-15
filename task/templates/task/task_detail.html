@@ -1,0 +1,20 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ task.task_title }}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'task/css/styles.css' %}">
+</head>
+<body>
+    <h1>Task Details</h1>
+    <p><strong>Title:</strong> {{ task.task_title }}</p>
+    <p><strong>Description:</strong> {{ task.task_description }}</p>
+    <p><strong>Status:</strong> {{ task.task_status }}</p>
+    <p><strong>Created At:</strong> {{ task.task_created_at|date:"Y-m-d H:i" }}</p>
+
+    <!-- Links to Edit and Delete -->
+    <a href="{% url 'task_edit' task.id %}">Edit</a>
+    <a href="{% url 'task_delete' task.id %}">Delete</a>
+    <a href="{% url 'task_list' %}">Back to Task Board</a>
+</body>
+</html>

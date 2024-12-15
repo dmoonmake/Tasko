@@ -1,0 +1,21 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Task</title>
+    <!-- Include the external CSS file -->
+    <link rel="stylesheet" type="text/css" href="{% static 'task/css/styles.css' %}">
+</head>
+<body>
+    <nav>
+        <a href="{% url 'task_list' %}">Task List</a> |
+        <a href="{% url 'task_create' %}">Create Task</a>
+    </nav>
+    <h1>Edit Task</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save Changes</button>
+    </form>
+</body>
+</html>

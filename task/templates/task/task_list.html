@@ -1,10 +1,73 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Task List</title>
+    <title>Kanban Board</title>
+    <!-- Include Sortable.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.6/Sortable.min.js"></script>
+    <!-- Include the external CSS file -->
+    <link rel="stylesheet" type="text/css" href="{% static 'task/css/styles.css' %}">
 </head>
 <body>
-    <h1>Task List</h1>
-    <p>This is the task list view!</p>
+  <nav>
+    <a href="{% url 'task_list' %}">Task List</a> |
+    <a href="{% url 'task_create' %}">Create Task</a>
+  </nav>
+    <h1>Kanban Board</h1>
+    <div id="kanban">
+        <div class="kanban-column">
+            <h3>To-Do</h3>
+            <div class="task-container" id="todo">
+                {% for task in tasks %}
+                    {% if task.task_status == 'To-Do' %}
+                    <div class="task" data-id="{{ task.id }}" onclick="openTaskDetails({{ task.id }})">
+                        {{ task.task_title }}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="kanban-column">
+            <h3>In Progress</h3>
+            <div class="task-container" id="inprogress">
+                {% for task in tasks %}
+                    {% if task.task_status == 'In Progress' %}
+                    <div class="task" data-id="{{ task.id }}" onclick="openTaskDetails({{ task.id }})">
+                        {{ task.task_title }}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="kanban-column">
+            <h3>Done</h3>
+            <div class="task-container" id="done">
+                {% for task in tasks %}
+                    {% if task.task_status == 'Done' %}
+                    <div class="task" data-id="{{ task.id }}" onclick="openTaskDetails({{ task.id }})">
+                        {{ task.task_title }}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup Modal -->
+    <div id="taskModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeTaskDetails()">&times;</span>
+            <div id="taskDetails">
+                <!-- Task details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- CSRF Token for AJAX -->
+    <form method="POST">
+        {% csrf_token %}
+    </form>
+    <!-- Include the JavaScript file -->
+    <script src="{% static 'task/js/scripts.js' %}"></script>
 </body>
 </html>

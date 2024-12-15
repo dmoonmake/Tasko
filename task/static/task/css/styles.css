@@ -1,0 +1,106 @@
+/* General styling */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  text-align: center;
+  margin: 20px 0;
+}
+
+/* Kanban board styles */
+#kanban {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+.kanban-column {
+  width: 300px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.task-container {
+  min-height: 100px;
+  padding: 10px;
+  border: 1px dashed #ddd;
+}
+
+.task {
+  padding: 10px;
+  margin: 5px 0;
+  background-color: #e3f2fd;
+  border-radius: 3px;
+  cursor: grab;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Highlight drop zones during dragging */
+.task-container.sortable-dragging {
+  background-color: #f0f8ff;
+}
+
+.task-container.sortable-dragover {
+  border-color: #87cefa;
+}
+
+.task:hover {
+  background-color: #bbdefb;
+  transform: scale(1.02);
+  transition: all 0.2s ease-in-out;
+}
+
+@media (max-width: 768px) {
+  #kanban {
+      flex-direction: column;
+      align-items: center;
+  }
+
+  .kanban-column {
+      width: 90%;
+  }
+}
+
+/* Modal styles */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4); /* Black background with opacity */
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 10% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  border-radius: 5px;
+  width: 50%;
+  position: relative;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
