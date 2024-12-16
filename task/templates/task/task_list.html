@@ -1,8 +1,8 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Kanban Board</title>
+  <head>
+    <title>Tasko - The task Manager</title>
     <!-- Include Sortable.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.6/Sortable.min.js"></script>
     <!-- Include the external CSS file -->
@@ -11,9 +11,10 @@
 <body>
   <nav>
     <a href="{% url 'task_list' %}">Task List</a> |
+    <a href="{% url 'task_list_table' %}">Task table</a> |
     <a href="{% url 'task_create' %}">Create Task</a>
   </nav>
-    <h1>Kanban Board</h1>
+    <h1>Tasko Board</h1>
     <div id="kanban">
         <div class="kanban-column">
             <h3>To-Do</h3>
@@ -21,7 +22,12 @@
                 {% for task in tasks %}
                     {% if task.task_status == 'To-Do' %}
                     <div class="task" data-id="{{ task.id }}" onclick="openTaskDetails({{ task.id }})">
-                        {{ task.task_title }}
+                        {{ task.task_title }} - Assigned to: 
+                        {% if task.task_assigned_to %}
+                          {{ task.task_assigned_to.username }}
+                        {% else %}
+                          Unassigned
+                        {% endif %}
                     </div>
                     {% endif %}
                 {% endfor %}
@@ -33,7 +39,12 @@
                 {% for task in tasks %}
                     {% if task.task_status == 'In Progress' %}
                     <div class="task" data-id="{{ task.id }}" onclick="openTaskDetails({{ task.id }})">
-                        {{ task.task_title }}
+                      {{ task.task_title }} - Assigned to: 
+                      {% if task.task_assigned_to %}
+                        {{ task.task_assigned_to.username }}
+                      {% else %}
+                        Unassigned
+                      {% endif %}
                     </div>
                     {% endif %}
                 {% endfor %}
@@ -45,7 +56,12 @@
                 {% for task in tasks %}
                     {% if task.task_status == 'Done' %}
                     <div class="task" data-id="{{ task.id }}" onclick="openTaskDetails({{ task.id }})">
-                        {{ task.task_title }}
+                      {{ task.task_title }} - Assigned to: 
+                      {% if task.task_assigned_to %}
+                        {{ task.task_assigned_to.username }}
+                      {% else %}
+                        Unassigned
+                      {% endif %}
                     </div>
                     {% endif %}
                 {% endfor %}

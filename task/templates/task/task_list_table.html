@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tasko - The task Manager</title>
+    <!-- Include Sortable.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.6/Sortable.min.js"></script>
+    <!-- Include the external CSS file -->
+    <link rel="stylesheet" type="text/css" href="{% static 'task/css/styles.css' %}">
+</head>
+<body>
+    <h1>All Tasks</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th>Assigned To</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for task in tasks %}
+            <tr>
+                <td>{{ task.task_title }}</td>
+                <td>{{ task.task_status }}</td>
+                <td>{{ task.task_priority }}</td>
+                <td>
+                  {% if task.task_assigned_to %}
+                      {{ task.task_assigned_to.username }}
+                  {% else %}
+                      Unassigned
+                  {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

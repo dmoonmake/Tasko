@@ -6,10 +6,14 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 
-
+# Task List View
 def task_list(request):
     tasks = Task.objects.all()
     return render(request, 'task/task_list.html', {'tasks': tasks})
+
+def task_list_table(request):
+    tasks = Task.objects.all()
+    return render(request, 'task/task_list_Table.html', {'tasks': tasks})
 
 def task_create(request):
     if request.method == 'POST':
@@ -38,6 +42,7 @@ def task_edit(request, task_id):
         form = TaskForm(instance=task)
     return render(request, 'task/task_edit.html', {'form': form, 'task': task})
 
+# Task Detail View
 def task_detail(request, task_id):
     # Retrieve the task by its ID or show 404 if not found
     task = get_object_or_404(Task, id=task_id)
@@ -47,6 +52,7 @@ def task_detail(request, task_id):
         'task_title': task.task_title,
         'task_description': task.task_description,
         'task_status': task.task_status,
+        'task_priority': task.task_priority,
         'task_created_at': task.task_created_at.strftime('%Y-%m-%d %H:%M:%S'),
     })
 

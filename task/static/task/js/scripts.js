@@ -58,7 +58,7 @@ function openTaskDetails(taskId) {
                 <p><strong>Description:</strong> ${data.task_description}</p>
                 <p><strong>Status:</strong> ${data.task_status}</p>
                 <p><strong>Created At:</strong> ${data.task_created_at}</p>
-                <a href="/tasks/edit/${taskId}/">Edit</a> |
+                <a href="/tasks/edit/${taskId}/" target="_blank">Edit</a> |
                 <a href="/tasks/delete/${taskId}/">Delete</a>
             `;
         })

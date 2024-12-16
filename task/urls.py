@@ -3,6 +3,7 @@ from . import views  # Import views from the same app
 
 urlpatterns = [
     path('', views.task_list, name='task_list'),  # Default route to the task list view
+    path('table/', views.task_list_table, name='task_list_table'),
     path('create/', views.task_create, name='task_create'),
     path('edit/<int:task_id>/', views.task_edit, name='task_edit'),
     path('delete/<int:task_id>/', views.task_delete, name='task_delete'),
