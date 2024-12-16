@@ -1,23 +1,19 @@
-{% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ task.task_title }}</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'task/css/styles.css' %}">
-</head>
-<body>
-    <h1>{{ task.task_title }}</h1>
-    <p><strong>Task ID:</strong> {{ task.task_id }}</p>
-    <p><strong>Priority:</strong> {{ task.task_priority }}</p>
-    <p><strong>Description:</strong> {{ task.task_description }}</p>
-    <p><strong>Status:</strong> {{ task.task_status }}</p>
-    <p><strong>Created At:</strong> {{ task.task_created_at|date:"Y-m-d H:i" }}</p>
-    <p><strong>Closed At:</strong> {{ task.task_closed_at|date:"F j, Y, g:i a" if task.task_closed_at else "Not Closed" }}</p>
-    <p><strong>Assigned to:</strong> {{ task.task_assigned_to.username if task.task_assigned_to else "Unassigned" }}</p>
+{% extends "base.html" %}
 
-    <!-- Links to Edit and Delete -->
-    <a href="{% url 'task_edit' task.id %}">Edit</a>
-    <a href="{% url 'task_delete' task.id %}">Delete</a>
-    <a href="{% url 'task_list' %}">Back to Task Board</a>
-</body>
-</html>
+{% block title %}Tasko - The Task Manager{% endblock %}
+
+{% block content %}
+  <h1>{{ task.task_title }}</h1>
+  <p><strong>Task ID:</strong> {{ task.task_id }}</p>
+  <p><strong>Priority:</strong> {{ task.task_priority }}</p>
+  <p><strong>Description:</strong> {{ task.task_description }}</p>
+  <p><strong>Status:</strong> {{ task.task_status }}</p>
+  <p><strong>Created At:</strong> {{ task.task_created_at|date:"Y-m-d H:i" }}</p>
+  <p><strong>Closed At:</strong> {{ task.task_closed_at|date:"F j, Y, g:i a" if task.task_closed_at else "Not Closed" }}</p>
+  <p><strong>Assigned to:</strong> {{ task.task_assigned_to.username if task.task_assigned_to else "Unassigned" }}</p>
+
+  <!-- Links to Edit and Delete -->
+  <a href="{% url 'task_edit' task.id %}">Edit</a>
+  <a href="{% url 'task_delete' task.id %}">Delete</a>
+  <a href="{% url 'task_list' %}">Back to Task Board</a>
+{% endblock %}

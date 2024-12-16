@@ -1,14 +1,8 @@
-{% load static %}
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Tasko - The task Manager</title>
-    <!-- Include Sortable.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.6/Sortable.min.js"></script>
-    <!-- Include the external CSS file -->
-    <link rel="stylesheet" type="text/css" href="{% static 'task/css/styles.css' %}">
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Task List{% endblock %}
+
+{% block content %}
     <h1>All Tasks</h1>
     <table>
         <thead>
@@ -16,6 +10,7 @@
                 <th>Title</th>
                 <th>Status</th>
                 <th>Priority</th>
+                <th>Deadline</th>
                 <th>Assigned To</th>
                 <th>Actions</th>
             </tr>
@@ -26,6 +21,7 @@
                 <td>{{ task.task_title }}</td>
                 <td>{{ task.task_status }}</td>
                 <td>{{ task.task_priority }}</td>
+                <td>{{ task.task_deadline }}</td>
                 <td>
                   {% if task.task_assigned_to %}
                       {{ task.task_assigned_to.username }}
@@ -33,9 +29,14 @@
                       Unassigned
                   {% endif %}
                 </td>
+                <td>
+                  <a href="{% url 'task_edit' task.id %}">Edit</a> | 
+                  <a href="{% url 'task_delete' task.id %}">Delete</a>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-</body>
-</html>
+    {% load static %}
+    <script src="{% static 'task/js/scripts.js' %}"></script>
+    {% endblock %}

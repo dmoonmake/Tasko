@@ -1,12 +1,20 @@
 /* General styling */
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Roboto Mono', monospace;
   background-color: #f9f9f9;
   margin: 0;
   padding: 0;
 }
 
-h1 {
+/* h1 {
+  font-family: 'Roboto Mono', monospace;
+  text-align: center;
+  margin: 20px 0;
+} */
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Roboto Mono', monospace;
+  font-weight: 500;
   text-align: center;
   margin: 20px 0;
 }
@@ -184,3 +192,114 @@ tfoot td {
   }
 }
 
+/* Center the form or container on the page */
+.center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full viewport height */
+  margin: 0;
+}
+
+.center-content {
+  width: 50%; /* Adjust width to your preference */
+  background-color: #fff;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Footer Styling */
+.footer {
+  text-align: center;
+  padding: 10px 0;
+  background-color: #f1f1f1; /* Light grey background */
+  color: #555; /* Subtle text color */
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  font-size: 14px;
+  border-top: 1px solid #ddd; /* Subtle top border */
+}
+
+.footer p {
+  margin: 0;
+}
+
+/* Navigation Bar Styling */
+.navbar {
+  background-color: #1976d2; /* Primary blue */
+  font-family: 'Roboto Mono', monospace;
+  color: white;
+  padding: 10px 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000; /* Ensure it stays on top */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.nav-logo {
+  font-size: 1.5em;
+  font-family: 'Roboto Mono', monospace;
+  font-weight: bold;
+  text-decoration: none;
+  color: white;
+}
+
+.nav-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.nav-links li {
+  margin-left: 20px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  font-family: 'Roboto Mono', monospace;
+  transition: color 0.3s ease-in-out;
+}
+
+.nav-links a:hover {
+  color: #bbdefb; /* Lighter blue on hover */
+}
+
+/* Responsive Navigation */
+@media (max-width: 768px) {
+  .nav-container {
+      flex-direction: column;
+      align-items: flex-start;
+  }
+
+  .nav-links {
+      flex-direction: column;
+      margin-top: 10px;
+  }
+
+  .nav-links li {
+      margin: 5px 0;
+  }
+}
+
+/* Add spacing so content isn't hidden behind fixed navbar */
+body {
+  padding-top: 60px;
+}
