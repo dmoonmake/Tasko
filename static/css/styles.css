@@ -138,7 +138,7 @@ body.dark-mode {
   border: 1px solid #ffffff;
   color: white;
   border-radius: 5px;
-  background-color: transparent;
+  background-color: black;
   font-family: 'Roboto Mono', monospace;
   font-weight: 500;
   transition: background-color 0.3s ease, color 0.3s ease;
@@ -283,6 +283,21 @@ body.dark-mode {
   .kanban-column {
     width: 90%;
   }
+}
+
+.center-container {
+  display: flex; /* Enables Flexbox */
+  justify-content: center; /* Horizontally center */
+  align-items: center; /* Vertically center */
+  min-height: 100vh; /* Full viewport height */
+  margin: 0;
+  background-color: var(--bg-color); /* Light/Dark mode compatibility */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.center-container .form-content {
+  margin-top: -50px; /* Move content upward slightly */
 }
 
 
