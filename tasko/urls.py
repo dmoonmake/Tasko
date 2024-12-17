@@ -19,6 +19,8 @@ from django.contrib import admin
 from django.urls import path, include
 from task import views
 from django.http import HttpResponse
+from django.contrib.auth import views as auth_views
+from tasko import views as tasko_views  # Custom registration view
 
 
 def home(request):
@@ -28,6 +30,10 @@ def home(request):
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('tasks/', include('task.urls')),  # Include task app URLs
+    path('boards/', include('board.urls')),
     path('', home),  # Custom view for root URL
+    path('accounts/login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),
+    path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('accounts/register/', tasko_views.register, name='register'),  # Add this for registration
 ]
 

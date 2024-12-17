@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Boards{% endblock %}
+
+{% block content %}
+<h1>Your Boards</h1>
+
+{% if boards %}
+    <ul>
+        {% for board in boards %}
+        <li>
+            <a href="{% url 'board_detail' board.id %}">{{ board.title }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'create_board' %}">Create New Board</a>
+{% else %}
+    <p>No boards to display.</p>
+    <p>Please log in or create a board to get started.</p>
+{% endif %}
+{% endblock %}

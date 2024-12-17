@@ -2,6 +2,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.timezone import now
+from board.models import Column
 
 class Task(models.Model):
   STATUS_CHOICES = [
@@ -25,6 +26,7 @@ class Task(models.Model):
   task_updated_at = models.DateTimeField(auto_now=True, verbose_name="Last Updated")
   task_deadline = models.DateField(blank=True, null=True, verbose_name="Deadline")
   task_closed_at = models.DateTimeField(null=True, blank=True) # Track close date
+  task_column = models.ForeignKey(Column, on_delete=models.CASCADE, null=True, blank=True, related_name="tasks")
 
 class Meta:
   ordering = ["-task_priority", "task_status", "task_created_at"]

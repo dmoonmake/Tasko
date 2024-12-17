@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "task",
+    "board",
 ]
 
 MIDDLEWARE = [
@@ -125,3 +126,11 @@ STATICFILES_DIRS = [BASE_DIR / "static"]  # Adjust BASE_DIR if needed
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
+# Redirect users to boards after login
+LOGIN_REDIRECT_URL = "boards/"
+
+# Redirect to login page if user is not authenticated
+LOGIN_URL = "accounts/login/"
+
+# Optionally, redirect to home after logout
+LOGOUT_REDIRECT_URL = "/"
