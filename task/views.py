@@ -5,26 +5,37 @@ from .forms import TaskForm
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 # Task List View
+@login_required
 def task_list(request):
-    tasks = Task.objects.all()
+    messages.info(request, "Please log in to view your tasks.")
+    # Filter tasks for the logged-in user
+    tasks = Task.objects.filter(task_assigned_to=request.user)
     return render(request, 'task/task_list.html', {'tasks': tasks})
 
+@login_required
 def task_list_table(request):
-    tasks = Task.objects.all()
+    tasks = Task.objects.filter(task_assigned_to=request.user)
     return render(request, 'task/task_list_Table.html', {'tasks': tasks})
 
+@login_required
 def task_create(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = TaskForm(request.POST)
         if form.is_valid():
-            form.save()
-            # Redirect to task list after creating
-            return redirect('task_list')
+            task = form.save(commit=False)
+            # Automatically assign the task to the logged-in user
+            task.task_assigned_to = request.user
+            task.save()
+            return redirect("task_list")  # Redirect to task list after saving
     else:
         form = TaskForm()
-    return render(request, 'task/task_create.html', {'form': form})
+
+    return render(request, "task/task_create.html", {"form": form})
+
 
 def task_delete(request, task_id):
     task = get_object_or_404(Task, id=task_id)
@@ -53,7 +64,8 @@ def task_detail(request, task_id):
         'task_description': task.task_description,
         'task_status': task.task_status,
         'task_priority': task.task_priority,
-        'task_created_at': task.task_created_at.strftime('%Y-%m-%d %H:%M:%S'),
+        'task_assigned_to': task.task_assigned_to,
+        'task_deadline': task.task_deadline,
     })
 
 @csrf_exempt

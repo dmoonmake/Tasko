@@ -11,7 +11,7 @@
           {% for task in tasks %}
               {% if task.task_status == 'To-Do' %}
               <div class="task" data-id="{{ task.id }}" onclick="openTaskDetails({{ task.id }})">
-                  {{ task.task_title }} - Assigned to: 
+                  {{ task.task_title }} >> 
                   {% if task.task_assigned_to %}
                     {{ task.task_assigned_to.username }}
                   {% else %}
@@ -28,7 +28,7 @@
           {% for task in tasks %}
               {% if task.task_status == 'In Progress' %}
               <div class="task" data-id="{{ task.id }}" onclick="openTaskDetails({{ task.id }})">
-                {{ task.task_title }} - Assigned to: 
+                {{ task.task_title }} >>
                 {% if task.task_assigned_to %}
                   {{ task.task_assigned_to.username }}
                 {% else %}
@@ -45,7 +45,7 @@
           {% for task in tasks %}
               {% if task.task_status == 'Done' %}
               <div class="task" data-id="{{ task.id }}" onclick="openTaskDetails({{ task.id }})">
-                {{ task.task_title }} - Assigned to: 
+                {{ task.task_title }} >> 
                 {% if task.task_assigned_to %}
                   {{ task.task_assigned_to.username }}
                 {% else %}

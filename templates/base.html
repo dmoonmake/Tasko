@@ -44,7 +44,7 @@
         </ul>
 
         <!-- Right-Side Navigation -->
-        <div class="nav-auth">
+        <!-- <div class="nav-auth">
             {% if user.is_authenticated %}
                 <a href="{% url 'logout' %}" class="btn-auth logout-btn">Logout</a>
             {% else %}
@@ -52,7 +52,19 @@
                 <a href="{% url 'register' %}" class="btn-auth register-btn">Register</a>
             {% endif %}
             <button id="darkModeToggle" class="dark-mode-toggle">🌙</button>
-        </div>
+        </div> -->
+        <div class="nav-auth">
+          {% if user.is_authenticated %}
+              <form method="POST" action="{% url 'logout' %}" style="display: inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="btn-auth logout-btn">Logout</button>
+              </form>
+          {% else %}
+              <a href="{% url 'login' %}" class="btn-auth">Login</a>
+              <a href="{% url 'register' %}" class="btn-auth register-btn">Register</a>
+          {% endif %}
+          <button id="darkModeToggle" class="dark-mode-toggle">🌙</button>
+      </div>
     </div>
   </nav>
 

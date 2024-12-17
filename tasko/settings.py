@@ -127,10 +127,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # Redirect users to boards after login
-LOGIN_REDIRECT_URL = "boards/"
+LOGIN_REDIRECT_URL = "task_list"
 
 # Redirect to login page if user is not authenticated
-LOGIN_URL = "accounts/login/"
+LOGIN_URL = "/accounts/login/"
 
 # Optionally, redirect to home after logout
 LOGOUT_REDIRECT_URL = "/"
