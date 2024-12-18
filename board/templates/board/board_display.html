@@ -4,12 +4,40 @@
 
 {% block content %}
 <h1>{{ board.board_title }}</h1>
-<!-- Button to Go to Board Settings -->
-<a href="{% url 'board_setting' board.id %}">
-  <button id="board-settings-button">Board Settings</button>
-</a>
 
-<div id="board-columns">
+<!-- Conditional Board Settings Button -->
+{% if is_creator %}
+<a href="{% url 'board_setting' board.id %}">
+    <button id="board-settings-button">Board Settings</button>
+</a>
+{% endif %}
+
+<!-- Board Columns as Kanban -->
+<div id="kanban">
+  {% for column in columns %}
+  <div class="kanban-column">
+      <h3>{{ column.column_title }}</h3>
+      <div class="task-container" data-column-id="{{ column.id }}">
+          {% for task in column.tasks.all %}
+          <div class="task" data-id="{{ task.id }}" onclick="openTaskDetails({{ task.id }})">
+              {{ task.task_title }}
+              {% if task.task_assigned_to %}
+                  >> {{ task.task_assigned_to.username }}
+              {% else %}
+                  >> Unassigned
+              {% endif %}
+          </div>
+          {% empty %}
+          <div class="task">
+              No tasks in this column
+          </div>
+          {% endfor %}
+      </div>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- <div id="board-columns" style="display: flex; gap: 20px;">
     {% for column in columns %}
     <div class="column">
         <h3>{{ column.column_title }}</h3>
@@ -22,5 +50,5 @@
         </ul>
     </div>
     {% endfor %}
-</div>
+</div> -->
 {% endblock %}

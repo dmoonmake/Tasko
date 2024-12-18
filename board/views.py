@@ -50,6 +50,11 @@ def create_board(request):
 def create_column(request, board_id):
     if request.method == "POST":
         board = get_object_or_404(Board, id=board_id)
+
+        # Check if the board already has 6 columns
+        if board.columns.count() >= 6:
+            return JsonResponse({"error": "Column limit reached. You cannot add more than 8 columns."}, status=400)
+
         column_title = request.POST.get("column_title")
         if column_title:
             column_order = board.columns.count()  # Add the column at the end
@@ -112,4 +117,21 @@ def board_display(request, board_id):
     board = get_object_or_404(Board, id=board_id)
     columns = board.columns.all().order_by("column_order")
     tasks = Task.objects.filter(task_column__in=columns)  # Fetch tasks in the board's columns
+    # Check if the logged-in user is the creator of the board
+    is_creator = board.board_created_by == request.user
+    
     return render(request, 'board/board_display.html', {'board': board, 'columns': columns, 'tasks': tasks})
+
+@login_required
+def delete_board(request, board_id):
+    if request.method == "POST":
+        board = get_object_or_404(Board, id=board_id)
+
+        # Only the board creator can delete the board
+        if board.board_created_by != request.user:
+            return JsonResponse({"error": "You do not have permission to delete this board."}, status=403)
+
+        board.delete()
+        # Redirect to the Board List page
+        return redirect('board_list')  # Use the name of the board list URL
+    return JsonResponse({"error": "Invalid request method."}, status=400)

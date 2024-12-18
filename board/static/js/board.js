@@ -47,8 +47,6 @@ document.addEventListener("DOMContentLoaded", function () {
               .then(response => response.json())
               .then(data => {
                   if (data.id) {
-                      console.log("Column added successfully:", data);
-
                       // Dynamically add the new column to the board
                       // const boardColumns = document.getElementById("board-columns");
                       const newColumn = document.createElement("div");
@@ -95,6 +93,37 @@ document.addEventListener("DOMContentLoaded", function () {
               });
       }
   });
+
+  //Delete Board
+  document.addEventListener("click", function (e) {
+      if (e.target.classList.contains("delete-board-button")) {
+          const boardId = e.target.dataset.boardId;
+
+          if (confirm("Are you sure you want to delete this board? This action cannot be undone.")) {
+              fetch(`/boards/${boardId}/delete/`, {
+                  method: "POST",
+                  headers: {
+                      "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+                  },
+              })
+                  .then((response) => response.json())
+                  .then((data) => {
+                      if (data.message) {
+                          alert(data.message);
+                          // Remove the board row from the table
+                          e.target.closest("tr").remove();
+                      } else {
+                          alert(data.error);
+                      }
+                  })
+                  .catch((error) => {
+                      console.error("Error deleting board:", error);
+                      alert("An error occurred. Please try again.");
+                  });
+          }
+      }
+  });
+
 
   // Drag-and-Drop for Columns
   const boardColumns = document.getElementById("board-columns");

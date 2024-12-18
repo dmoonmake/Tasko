@@ -29,8 +29,17 @@
     </form>
 </div>
 
-<!-- Drag-and-Drop Save Button -->
-<button id="save-board-settings-button" style="display: none;">Save Settings</button>
+<!-- Save Button -->
+<button id="save-board-settings-button">Save Settings</button>
+
+<!-- Delete Button
+<button id="delete-board-button">Delete Board</button> -->
+
+<!-- Delete Board Button -->
+<form id="delete-board-form" method="POST" action="{% url 'delete_board' board.id %}">
+    {% csrf_token %}
+    <button type="submit" class="modern-button delete-button">Delete Board</button>
+</form>
 
 {% load static %}
 <script src="{% static 'js/board.js' %}"></script>
