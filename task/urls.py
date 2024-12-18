@@ -11,6 +11,7 @@ urlpatterns = [
     path('delete/<int:task_id>/', views.task_delete, name='task_delete'),
     path('update-status/', views.update_task_status, name='update_task_status'),
     path('<int:task_id>/', views.task_detail, name='task_detail'),
+    path('<int:task_id>/detail/', views.task_detail_ajax, name='task_detail_ajax'),
 
     # # Login, Logout, and Register
     # path('accounts/login/', auth_views.LoginView.as_view(template_name='registration/login.html'), name='login'),

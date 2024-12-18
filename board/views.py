@@ -135,3 +135,74 @@ def delete_board(request, board_id):
         # Redirect to the Board List page
         return redirect('board_list')  # Use the name of the board list URL
     return JsonResponse({"error": "Invalid request method."}, status=400)
+
+@login_required
+def add_task_to_column(request, column_id):
+    if request.method == "POST":
+        column = get_object_or_404(Column, id=column_id)
+        board = column.column_board
+
+        task_title = request.POST.get("task_title")
+        assigned_to_id = request.POST.get("assigned_to")  # Optional
+        assigned_to = None
+
+        if assigned_to_id:
+            assigned_to = board.board_members.filter(id=assigned_to_id).first()
+
+        # Determine task status based on the column's position
+        if column.column_order == 0:
+            task_status = "To-Do"
+        elif column.column_order == board.columns.count() - 1:
+            task_status = "Done"
+        else:
+            task_status = "In Progress"
+
+        # Create the task
+        task = Task.objects.create(
+            task_title=task_title,
+            task_status=task_status,
+            task_column=column,
+            task_assigned_to=assigned_to,
+        )
+
+        return JsonResponse({
+            "message": "Task added successfully.",
+            "task_id": task.id,
+            "task_title": task.task_title,
+            "task_status": task.task_status,
+            "assigned_to": assigned_to.username if assigned_to else None,
+        })
+    return JsonResponse({"error": "Invalid request method."}, status=400)
+
+@csrf_exempt
+@login_required
+def move_task(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        task_id = data.get("task_id")
+        column_id = data.get("column_id")
+
+        task = Task.objects.get(id=task_id)
+        column = Column.objects.get(id=column_id)
+
+        # Update the task's column
+        task.task_column = column
+
+        # Update the task's status based on the column's position
+        if column.column_order == 0:
+            task.task_status = "To-Do"
+        elif column.column_order == column.column_board.columns.count() - 1:
+            task.task_status = "Done"
+        else:
+            task.task_status = "In Progress"
+
+        task.save()
+
+        return JsonResponse({
+            "message": "Task moved successfully.",
+            "task_status": task.task_status
+        })
+
+    return JsonResponse({"error": "Invalid request method."}, status=400)
+
+

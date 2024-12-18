@@ -13,7 +13,7 @@
 {% endif %}
 
 <!-- Board Columns as Kanban -->
-<div id="kanban">
+<!-- <div id="kanban">
   {% for column in columns %}
   <div class="kanban-column">
       <h3>{{ column.column_title }}</h3>
@@ -35,20 +35,52 @@
       </div>
   </div>
   {% endfor %}
+</div> -->
+
+<!-- Board Columns as Kanban -->
+<div id="kanban" style="display: flex; gap: 20px;">
+  {% for column in columns %}
+  <div class="kanban-column" data-column-id="{{ column.id }}">
+      <h3>{{ column.column_title }}</h3>
+      <div class="task-container" id="tasks-column-{{ column.id }}">
+          {% for task in column.tasks.all %}
+          <div class="task-card" draggable="true" data-task-id="{{ task.id }}"" onclick="openTaskModal({{ task.id }})">
+              <h4>{{ task.task_title }}</h4>
+              <p class="task-status">Status: {{ task.task_status }}</p>
+              {% if task.task_assigned_to %}
+              <p>>> {{ task.task_assigned_to.username }}</p>
+              {% endif %}
+          </div>
+          {% endfor %}
+
+          <!-- Task Modal -->
+          <div id="task-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeTaskModal()">&times;</span>
+                <h3 id="task-modal-title"></h3>
+                <p><strong>Description:</strong> <span id="task-modal-description"></span></p>
+                <p><strong>Status:</strong> <span id="task-modal-status"></span></p>
+                <p><strong>Priority:</strong> <span id="task-modal-priority"></span></p>
+                <p><strong>Deadline:</strong> <span id="task-modal-deadline"></span></p>
+                <p><strong>Assigned to:</strong> <span id="task-modal-assigned-to"></span></p>
+
+                <!-- Action Buttons -->
+                <a id="edit-task-link" href="#">
+                    <button>Edit</button>
+                </a>
+                <form id="delete-task-form" method="POST" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit">Delete</button>
+                </form>
+            </div>
+          </div>
+
+      </div>
+  </div>
+  {% endfor %}
 </div>
 
-<!-- <div id="board-columns" style="display: flex; gap: 20px;">
-    {% for column in columns %}
-    <div class="column">
-        <h3>{{ column.column_title }}</h3>
-        <ul>
-            {% for task in column.tasks.all %}
-            <li>{{ task.task_title }} ({{ task.task_status }})</li>
-            {% empty %}
-            <li>No tasks in this column</li>
-            {% endfor %}
-        </ul>
-    </div>
-    {% endfor %}
-</div> -->
+{% load static %}
+<script src="{% static 'js/board_task.js' %}"></script>
+
 {% endblock %}

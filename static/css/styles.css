@@ -25,6 +25,15 @@ h1, h2, h3, h4, h5, h6 {
   --nav-text: white;
   --dropdown-bg: white;
   --dropdown-text: black;
+
+  --modal-bg: #f7f6f6;
+  --modal-text-color: #323030;
+  --modal-border-color: #dddddd;
+
+  /* Dark mode overrides */
+  --modal-bg-dark: #f6f4f4;
+  --modal-text-color-dark: #e0e0e0;
+  --modal-border-color-dark: #333333;
 }
 
 /* Dark Mode Variables */
@@ -37,6 +46,26 @@ body.dark-mode {
   --nav-text: #e0e0e0;
   --dropdown-bg: #2c2c2c;
   --dropdown-text: #e0e0e0;
+  /* background-color: var(--modal-bg-dark);
+  color: var(--modal-text-color-dark);
+  border: 1px solid var(--modal-border-color-dark); */
+}
+
+body.dark-mode .modal-content .close {
+  color: var(--modal-text-color-dark);
+}
+
+body.dark-mode .modal-content .close:hover {
+  color: var(--modal-text-color-dark);
+}
+
+body.dark-mode button {
+  background-color: #444444; /* Dark button background */
+  color: var(--modal-text-color-dark);
+}
+
+body.dark-mode button:hover {
+  background-color: #555555; /* Slightly lighter hover effect */
 }
 
 /* Navigation Bar */
@@ -209,7 +238,9 @@ body.dark-mode {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: var(--modal-bg);
+  color: var(--modal-text-color);
+  border: 1px solid var(--modal-border-color);
 }
 
 .modal-content {
@@ -220,6 +251,39 @@ body.dark-mode {
   border-radius: 5px;
   width: 50%;
   position: relative;
+}
+
+.modal-content .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #aaa;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.modal-content .close:hover {
+  color: black;
+  text-decoration: none;
+}
+
+.modal-content button {
+  padding: 10px 15px;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.modal-content button:hover {
+  background-color: #005bb5;
+}
+
+.modal-content form {
+  display: inline;
 }
 
 .close {
@@ -409,3 +473,4 @@ a:hover {
 .delete-button:hover {
   background-color: #e60000;
 }
+

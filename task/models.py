@@ -56,3 +56,4 @@ def is_overdue(self):
   if self.task_deadline and not self.task_closed_at:
     return self.task_deadline < now()
   return False
+
