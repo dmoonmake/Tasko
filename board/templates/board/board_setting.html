@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}{{ board.title }}{% endblock %}
+
+{% block content %}
+<h1>{{ board.board_title }} - Settings</h1>
+<p>Description: {{ board.board_description }}</p>
+
+<!-- Add Columns -->
+<div id="board-columns">
+    {% for column in columns %}
+    <div class="column" data-column-id="{{ column.id }}" style="border: 1px solid #ccc; padding: 10px;">
+        <h3>{{ column.column_title }}</h3>
+        <button class="delete-column-button" data-column-id="{{ column.id }}">Delete</button>
+    </div>
+    {% endfor %}
+</div>
+
+{% csrf_token %}
+<div id="board-data" data-board-id="{{ board.id }}"></div>
+
+<!-- Button to Add Column -->
+<button id="add-column-button">Add Column</button>
+<!-- Modal for Adding Column -->
+<div id="add-column-modal" style="display: none;">
+    <form id="add-column-form">
+        <input type="text" name="column_title" placeholder="Column Title" required>
+        <button type="submit">Save</button>
+    </form>
+</div>
+
+<!-- Drag-and-Drop Save Button -->
+<button id="save-board-settings-button" style="display: none;">Save Settings</button>
+
+{% load static %}
+<script src="{% static 'js/board.js' %}"></script>
+
+{% endblock %}

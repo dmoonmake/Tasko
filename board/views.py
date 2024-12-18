@@ -1,20 +1,33 @@
 # Create your views here.
+import json
+from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Board, Column
+from task.models import Task 
 from .forms import BoardForm, ColumnForm
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 
+
+@login_required
 def board_list(request):
-    if request.user.is_authenticated:
-        boards = request.user.boards.all()  # Boards the user is a member of
-    else:
-        boards = []  # Empty list for unauthenticated users
+    # Fetch all boards where the user is a member
+    user_boards = Board.objects.filter(board_members=request.user)
+
+    # Separate boards created by the user
+    boards = []
+    for board in user_boards:
+        boards.append({
+            'board': board,
+            'is_creator': board.board_created_by == request.user
+        })
+
     return render(request, 'board/board_list.html', {'boards': boards})
 
-def board_detail(request, board_id):
+def board_setting(request, board_id):
     board = get_object_or_404(Board, board_id=board_id)
     columns = board.columns.all().order_by('order')
-    return render(request, 'board/board_detail.html', {'board': board, 'columns': columns})
+    return render(request, 'board/board_setting.html', {'board': board, 'columns': columns})
 
 @login_required
 def create_board(request):
@@ -23,28 +36,80 @@ def create_board(request):
         if form.is_valid():
             # Save the board and assign the current user as the creator
             board = form.save(commit=False)
+            board.board_created_by = request.user
             board.save()
-            board.users.add(request.user)  # Automatically add the creator to the board
+            board.board_members.set(form.cleaned_data['board_members'])
+            board.board_members.add(request.user)  # Automatically add the creator to the board
             
-            # Add additional users to the board
-            additional_users = form.cleaned_data.get('users')  # Get selected users
-            board.users.add(*additional_users)
-            
-            return redirect("board_list")  # Redirect to the board list
+            return redirect("board_setting", board_id=board.id)  # Redirect to the board list
     else:
         form = BoardForm()
     return render(request, 'board/board_create.html', {'form': form})
 
+@login_required
 def create_column(request, board_id):
-    board = get_object_or_404(Board, board_id=board_id)
-    if request.method == 'POST':
-        form = ColumnForm(request.POST)
-        if form.is_valid():
-            column = form.save(commit=False)
-            column.board = board
-            column.save()
-            return redirect('board_detail', board_id=board_id)
-    else:
-        form = ColumnForm()
-    return render(request, 'board/column_form.html', {'form': form, 'board': board})
+    if request.method == "POST":
+        board = get_object_or_404(Board, id=board_id)
+        column_title = request.POST.get("column_title")
+        if column_title:
+            column_order = board.columns.count()  # Add the column at the end
+            column = Column.objects.create(
+                column_title=column_title,
+                column_board=board,
+                column_order=column_order
+            )
+            return JsonResponse({
+                "id": column.id,
+                "name": column.column_title,
+                "order": column.column_order
+            })
+        else:
+            return JsonResponse({"error": "Column name is required."}, status=400)
+    return JsonResponse({"error": "Invalid request method."}, status=400)
 
+@login_required
+def board_setting(request, board_id):
+    board = get_object_or_404(Board, id=board_id)
+    columns = board.columns.all().order_by("column_order")  # Order by column_order
+    return render(request, 'board/board_setting.html', {'board': board, 'columns': columns})
+
+@csrf_exempt
+def move_task(request, task_id):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        column_id = data.get("column_id")
+        task = get_object_or_404(Task, id=task_id)
+        column = get_object_or_404(Column, id=column_id)
+        task.task_column = column
+        task.save()
+        return JsonResponse({"message": "Task moved successfully."})
+    return JsonResponse({"error": "Invalid request method."}, status=400)
+
+@csrf_exempt
+def reorder_columns(request, board_id):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        column_ids = data.get("column_ids")  # List of column IDs in new order
+        for order, column_id in enumerate(column_ids):
+            column = Column.objects.get(id=column_id)
+            column.column_order = order
+            column.save()
+        return JsonResponse({"message": "Columns reordered successfully."})
+    return JsonResponse({"error": "Invalid request method."}, status=400)
+
+def check_board_access(user, board):
+    if user not in board.board_members.all():
+        raise HttpResponseForbidden("You are not authorized to access this board.")
+    
+@login_required
+def delete_column(request, board_id, column_id):
+    column = get_object_or_404(Column, id=column_id, column_board_id=board_id)
+    column.delete()
+    return JsonResponse({"success": True})
+
+@login_required
+def board_display(request, board_id):
+    board = get_object_or_404(Board, id=board_id)
+    columns = board.columns.all().order_by("column_order")
+    tasks = Task.objects.filter(task_column__in=columns)  # Fetch tasks in the board's columns
+    return render(request, 'board/board_display.html', {'board': board, 'columns': columns, 'tasks': tasks})

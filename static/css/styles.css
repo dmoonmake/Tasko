@@ -300,4 +300,97 @@ body.dark-mode {
   margin-top: -50px; /* Move content upward slightly */
 }
 
+/* Container for board columns */
+#board-columns {
+  display: flex; /* Enables horizontal layout */
+  gap: 20px; /* Adds spacing between columns */
+  justify-content: flex-start; /* Aligns columns to the left */
+  align-items: flex-start; /* Aligns columns vertically at the top */
+  overflow-x: auto; /* Allows horizontal scrolling if there are too many columns */
+  padding: 10px;
+  scrollbar-width: thin; /* Firefox */
+  width: 100%; /* Ensures container spans full width */
+  box-sizing: border-box;
+}
+
+/* Individual column styling */
+.column {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  width: 200px; /* Fixed width for each column */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0; /* Prevents columns from shrinking */
+}
+
+/* Column title */
+.column h3 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* Delete column button */
+.column button {
+  display: block;
+  margin: 10px auto 0;
+  padding: 5px 10px;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.column button:hover {
+  background-color: #ff3333;
+}
+
+table {
+  width: 90%;
+  margin: 20px auto;
+  border-collapse: collapse;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+thead {
+  background-color: #1976d2;
+  color: white;
+}
+
+thead th {
+  padding: 15px;
+  text-align: left;
+  font-weight: bold;
+}
+
+tbody tr {
+  border-bottom: 1px solid #ddd;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+tbody td {
+  padding: 15px;
+}
+
+tbody tr:hover {
+  background-color: #e3f2fd;
+  transition: background-color 0.2s ease-in-out;
+}
+
+a {
+  color: #1976d2;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a:hover {
+  text-decoration: underline;
+}
 
