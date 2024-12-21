@@ -20,7 +20,7 @@ h1, h2, h3, h4, h5, h6 {
   --bg-color: #f9f9f9;
   --text-color: #333;
   --card-bg: #fff;
-  --border-color: #ddd;
+  --border-color: blue;
   --nav-bg: #1976d2;
   --nav-text: white;
   --dropdown-bg: white;
@@ -28,12 +28,12 @@ h1, h2, h3, h4, h5, h6 {
 
   --modal-bg: #f7f6f6;
   --modal-text-color: #323030;
-  --modal-border-color: #dddddd;
+  --modal-border-color: #2424f0;
 
   /* Dark mode overrides */
   --modal-bg-dark: #f6f4f4;
   --modal-text-color-dark: #e0e0e0;
-  --modal-border-color-dark: #333333;
+  --modal-border-color-dark: #f0eded;
 }
 
 /* Dark Mode Variables */
@@ -41,7 +41,7 @@ body.dark-mode {
   --bg-color: #121212;
   --text-color: #e0e0e0;
   --card-bg: #1e1e1e;
-  --border-color: #333;
+  --border-color: white;
   --nav-bg: #1e1e1e;
   --nav-text: #e0e0e0;
   --dropdown-bg: #2c2c2c;
@@ -474,3 +474,127 @@ a:hover {
   background-color: #e60000;
 }
 
+.primary-button {
+  padding: 10px 20px; /* Add padding for a clickable area */
+  background-color: #1976d2; /* Primary blue color */
+  color: white; /* Text color */
+  border: none; /* Remove default border */
+  border-radius: 5px; /* Rounded corners */
+  font-size: 16px; /* Font size for readability */
+  cursor: pointer; /* Pointer cursor on hover */
+  font-weight: bold; /* Bold text */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover effect */
+}
+
+.primary-button:hover {
+  background-color: #005bb5; /* Slightly darker blue on hover */
+  transform: scale(1.05); /* Slight zoom on hover */
+}
+
+.primary-button:focus {
+  outline: none; /* Remove default focus outline */
+  box-shadow: 0 0 5px 2px rgba(25, 118, 210, 0.5); /* Add focus ring */
+}
+
+.primary-button:disabled {
+  background-color: #cccccc; /* Gray background for disabled state */
+  color: #666666; /* Subtle text color for disabled state */
+  cursor: not-allowed; /* Not-allowed cursor for disabled buttons */
+  transform: none; /* Disable hover effect */
+}
+
+/* Task Card Styling */
+.task-card {
+  border: 1px solid var(--border-color); /* Add a border */
+  border-radius: 5px; /* Rounded corners */
+  padding: 10px; /* Add spacing inside the card */
+  margin-bottom: 10px; /* Space between cards */
+  background-color:var(--card-bg); /* Light background color */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  cursor: grab; /* Indicate draggable */
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Add smooth hover effect */
+}
+
+.task-card:hover {
+  transform: scale(1.02); /* Slight zoom on hover */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+}
+
+/* Assigned User Styling */
+.task-card p {
+  margin: 5px 0; /* Space between lines */
+  font-size: 0.9rem; /* Slightly smaller text for details */
+  color: var(--text-color); /* Subtle text color */
+}
+
+/* Assigned User Highlight */
+.task-card p.assigned-user {
+  font-weight: bold; /* Highlight assigned user */
+  color: #1976d2; /* Use a primary color */
+}
+
+/* Interactive Effects */
+.task-card:focus,
+.task-card:hover {
+    outline: none; /* Remove default focus outline */
+    border-color: #1976d2; /* Highlight border on hover or focus */
+}
+
+.task-card p.unassigned {
+  color: #888; /* Subtle color for unassigned text */
+}
+
+body.dark-mode .task-card {
+  background-color: var(--card-bg); /* Use dark mode background */
+  border-color: var(--border-color); /* Match border to dark theme */
+}
+
+body.dark-mode .task-card p {
+  color: var(--text-color); /* Adapt text color */
+}
+
+body.dark-mode .task-card p.assigned-user {
+  color: #bbdefb; /* Lighter blue for dark mode */
+}
+
+.secondary-button {
+  padding: 10px 20px;
+  background-color: white; /* Neutral background */
+  color: #1976d2; /* Primary color for text */
+  border: 1px solid #1976d2; /* Outline border */
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.secondary-button:hover {
+  background-color: #f0f8ff; /* Light blue background on hover */
+  color: #005bb5; /* Darker blue text on hover */
+}
+
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #888;
+  cursor: pointer;
+}
+
+.close-modal:hover {
+  color: #000;
+}
+
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+      transform: translateY(-10%);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}

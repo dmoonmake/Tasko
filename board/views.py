@@ -125,9 +125,21 @@ def check_board_access(user, board):
     
 @login_required
 def delete_column(request, board_id, column_id):
-    column = get_object_or_404(Column, id=column_id, column_board_id=board_id)
-    column.delete()
-    return JsonResponse({"success": True})
+    if request.method == "POST":
+        column = get_object_or_404(Column, id=column_id, column_board__id=board_id)
+
+        # Check if the column has tasks
+        if column.tasks.exists():  # Assuming the related name for tasks in the Column model is "tasks"
+            return JsonResponse({"success": False, "error": "Cannot delete column with existing tasks."}, status=400)
+
+        # Delete the column
+        column.delete()
+
+        # Fetch the updated column list
+        updated_columns = Column.objects.filter(column_board_id=board_id).values("id", "column_title")
+        return JsonResponse({"success": True, "message": "Column deleted successfully."})
+
+    return JsonResponse({"success": False, "error": "Invalid request method."}, status=405)
 
 @login_required
 def board_display(request, board_id):

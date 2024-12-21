@@ -11,16 +11,16 @@ from django.http import HttpResponseRedirect
 
 # Task List View
 @login_required
-def task_list(request):
+def task_kanban(request):
     messages.info(request, "Please log in to view your tasks.")
     # Filter tasks for the logged-in user
     tasks = Task.objects.filter(task_assigned_to=request.user)
-    return render(request, 'task/task_list.html', {'tasks': tasks})
+    return render(request, 'task/task_kanban.html', {'tasks': tasks})
 
 @login_required
-def task_list_table(request):
+def task_table(request):
     tasks = Task.objects.filter(task_assigned_to=request.user)
-    return render(request, 'task/task_list_Table.html', {'tasks': tasks})
+    return render(request, 'task/task_table.html', {'tasks': tasks})
 
 @login_required
 def task_create(request):
@@ -31,7 +31,7 @@ def task_create(request):
             # Automatically assign the task to the logged-in user
             task.task_assigned_to = request.user
             task.save()
-            return redirect("task_list")  # Redirect to task list after saving
+            return redirect("task_kanban")  # Redirect to task list after saving
     else:
         form = TaskForm()
 
@@ -41,7 +41,7 @@ def task_create(request):
 def task_delete(request, task_id):
     task = get_object_or_404(Task, id=task_id)
     task.delete()
-    return redirect('task_list')  # Redirect to task list after deleting
+    return redirect('task_kanban')  # Redirect to task list after deleting
 
 @login_required
 def task_edit(request, task_id):

@@ -13,19 +13,22 @@
 {% endif %}
 
 <!-- Board Columns as Kanban -->
-<div id="kanban" style="display: flex; gap: 20px;">
+<!-- <div id="kanban" style="display: flex; gap: 20px;"> -->
+ <div id="kanban">
   {% for column in columns %}
-
   <div class="kanban-column" data-column-id="{{ column.id }}">
       <h3>{{ column.column_title }}</h3>
       <button class="add-task-button">+</button>
+
       <div class="task-container" id="tasks-column-{{ column.id }}">
           {% for task in column.tasks.all %}
           <div class="task-card" draggable="true" data-task-id="{{ task.id }}"" onclick="openTaskModal({{ task.id }})">
-              <h4>{{ task.task_title }}</h4>
-              <p class="task-status">Status: {{ task.task_status }}</p>
+              {{ task.task_title }}
+              <!-- <p class="task-status">Status: {{ task.task_status }}</p> -->
               {% if task.task_assigned_to %}
-              <p>>> {{ task.task_assigned_to.username }}</p>
+                >> <span class="assigned-user">{{ task.task_assigned_to.username }}</span>
+              {% else %}
+                >> <span class="assigned-user unassigned">Unassigned</span>
               {% endif %}
           </div>
           {% endfor %}

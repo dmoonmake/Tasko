@@ -16,6 +16,7 @@ Including another URLconf
 """
 
 from django.contrib import admin
+from django.shortcuts import redirect
 from django.urls import path, include
 from task import views
 from django.http import HttpResponse
@@ -25,13 +26,13 @@ from . import views  # Import your custom views
 from task import views as task_views  # Import from 'task' app, not 'tasko'
 
 def home(request):
-    return HttpResponse('<h1>Welcome to Tasko!</h1><p>Go to <a href="/tasks/">Task List</a>.</p>')
+    return redirect('/accounts/login/')
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('tasks/', include('task.urls')),  # Include task app URLs
-    # path('tasks/', task_views.task_list, name='task_list'),  # Use the correct path
+    # path('tasks/', task_views.task_kanban, name='task_kanban'),  # Use the correct path
     path('boards/', include('board.urls')),
     path('', home),  # Custom view for root URL
     path('accounts/', include('django.contrib.auth.urls')), 

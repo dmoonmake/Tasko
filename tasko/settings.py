@@ -127,7 +127,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 # Redirect users to boards after login
-LOGIN_REDIRECT_URL = "task_list"
+LOGIN_REDIRECT_URL = "task_kanban"
 
 # Redirect to login page if user is not authenticated
 LOGIN_URL = "/accounts/login/"
