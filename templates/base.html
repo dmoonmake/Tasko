@@ -35,12 +35,14 @@
                 <a href="#">Task</a>
                 <ul class="dropdown-menu">
                     <li><a href="{% url 'task_list' %}">Task List</a></li>
-                    <li><a href="{% url 'task_create' %}">Create Task</a></li>
                     <li><a href="{% url 'task_list_table' %}">Task Table</a></li>
                 </ul>
             </li>
             <!-- Report Section -->
-            <li><a href="#">Report</a></li>
+            <li><a href="#">Report || </a></li>
+
+            <!-- Create Task Section -->
+            <li><a href="{% url 'task_create' %}">Create Task</a></li>
         </ul>
 
         <!-- Right-Side Navigation -->

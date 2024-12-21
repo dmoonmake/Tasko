@@ -13,35 +13,12 @@
 {% endif %}
 
 <!-- Board Columns as Kanban -->
-<!-- <div id="kanban">
-  {% for column in columns %}
-  <div class="kanban-column">
-      <h3>{{ column.column_title }}</h3>
-      <div class="task-container" data-column-id="{{ column.id }}">
-          {% for task in column.tasks.all %}
-          <div class="task" data-id="{{ task.id }}" onclick="openTaskDetails({{ task.id }})">
-              {{ task.task_title }}
-              {% if task.task_assigned_to %}
-                  >> {{ task.task_assigned_to.username }}
-              {% else %}
-                  >> Unassigned
-              {% endif %}
-          </div>
-          {% empty %}
-          <div class="task">
-              No tasks in this column
-          </div>
-          {% endfor %}
-      </div>
-  </div>
-  {% endfor %}
-</div> -->
-
-<!-- Board Columns as Kanban -->
 <div id="kanban" style="display: flex; gap: 20px;">
   {% for column in columns %}
+
   <div class="kanban-column" data-column-id="{{ column.id }}">
       <h3>{{ column.column_title }}</h3>
+      <button class="add-task-button">+</button>
       <div class="task-container" id="tasks-column-{{ column.id }}">
           {% for task in column.tasks.all %}
           <div class="task-card" draggable="true" data-task-id="{{ task.id }}"" onclick="openTaskModal({{ task.id }})">
@@ -53,7 +30,7 @@
           </div>
           {% endfor %}
 
-          <!-- Task Modal -->
+          <!-- Edit/Delete Task Modal -->
           <div id="task-modal" class="modal" style="display: none;">
             <div class="modal-content">
                 <span class="close" onclick="closeTaskModal()">&times;</span>
@@ -75,12 +52,26 @@
             </div>
           </div>
 
+          <!-- Add Task Modal -->
+          <div id="add-task-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeAddTaskModal()">&times;</span>
+                <h3>Add Task</h3>
+                <form id="add-task-form">
+                    {% csrf_token %}
+                    <input type="hidden" id="column-id" name="column_id">
+                    <input type="text" name="task_title" placeholder="Task Title" required>
+                    <button type="submit">Add Task</button>
+                </form>
+            </div>
+          </div>
+
       </div>
   </div>
   {% endfor %}
 </div>
 
 {% load static %}
-<script src="{% static 'js/board_task.js' %}"></script>
+<script src="{% static 'board/js/board_task.js' %}"></script>
 
 {% endblock %}

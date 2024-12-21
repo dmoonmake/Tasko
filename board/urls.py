@@ -13,6 +13,7 @@ urlpatterns = [
     path('<int:board_id>/columns/create/', views.create_column, name='create_column'),
     path('<int:board_id>/delete/', views.delete_board, name='delete_board'),  # Delete board endpoint  # Ensure this exists
     path('<int:column_id>/add-task/', views.add_task_to_column, name='add_task_to_column'),
+    path('<int:column_id>/create-task/', views.create_task_in_column, name='create_task_in_column'),
     path('move-task/', views.move_task, name='move_task'),
 ]
 

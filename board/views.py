@@ -79,15 +79,32 @@ def board_setting(request, board_id):
     return render(request, 'board/board_setting.html', {'board': board, 'columns': columns})
 
 @csrf_exempt
-def move_task(request, task_id):
+def move_task(request):
     if request.method == "POST":
         data = json.loads(request.body)
+        task_id = data.get("task_id")
         column_id = data.get("column_id")
+
         task = get_object_or_404(Task, id=task_id)
         column = get_object_or_404(Column, id=column_id)
+
         task.task_column = column
+
+        # Update task status based on column position
+        if column.column_order == 0:
+            task.task_status = "To-Do"
+        elif column.column_order == column.column_board.columns.count() - 1:
+            task.task_status = "Done"
+        else:
+            task.task_status = "In Progress"
+
         task.save()
-        return JsonResponse({"message": "Task moved successfully."})
+
+        return JsonResponse({
+            "message": "Task moved successfully.",
+            "task_status": task.task_status,
+        })
+
     return JsonResponse({"error": "Invalid request method."}, status=400)
 
 @csrf_exempt
@@ -137,7 +154,7 @@ def delete_board(request, board_id):
     return JsonResponse({"error": "Invalid request method."}, status=400)
 
 @login_required
-def add_task_to_column(request, column_id):
+def add_task_to_column(request, column_id): #Fetch and display task to column
     if request.method == "POST":
         column = get_object_or_404(Column, id=column_id)
         board = column.column_board
@@ -205,4 +222,39 @@ def move_task(request):
 
     return JsonResponse({"error": "Invalid request method."}, status=400)
 
+@login_required
+def create_task_in_column(request, column_id):
+    column = get_object_or_404(Column, id=column_id)
+    if request.method == "POST":
+        task_title = request.POST.get("task_title")
+        assigned_to_id = request.POST.get("assigned_to")
+        assigned_to = None
+
+        if assigned_to_id:
+            assigned_to = column.column_board.board_members.filter(id=assigned_to_id).first()
+
+        # Determine the task status based on column position
+        if column.column_order == 0:
+            task_status = "To-Do"
+        elif column.column_order == column.column_board.columns.count() - 1:
+            task_status = "Done"
+        else:
+            task_status = "In Progress"
+
+        task = Task.objects.create(
+            task_title=task_title,
+            task_status=task_status,
+            task_column=column,
+            task_assigned_to=assigned_to
+        )
+
+        return JsonResponse({
+            "message": "Task added successfully.",
+            "task_id": task.id,
+            "task_title": task.task_title,
+            "task_status": task.task_status,
+            "assigned_to": assigned_to.username if assigned_to else "Unassigned"
+        })
+
+    return JsonResponse({"error": "Invalid request method."}, status=400)
 
