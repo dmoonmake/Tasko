@@ -7,6 +7,7 @@ from task.models import Task
 from .forms import BoardForm, ColumnForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from board.models import Column,Board
 
 
 @login_required
@@ -27,7 +28,9 @@ def board_list(request):
 def board_setting(request, board_id):
     board = get_object_or_404(Board, board_id=board_id)
     columns = board.columns.all().order_by('order')
-    return render(request, 'board/board_setting.html', {'board': board, 'columns': columns})
+    # columns = board.columns.all().annotate(task_count=models.Count('tasks'))
+    is_creator = board.board_created_by == request.user
+    return render(request, 'board/board_setting.html', {'board': board, 'columns': columns,'is_creator': is_creator,})
 
 @login_required
 def create_board(request):
@@ -107,15 +110,18 @@ def move_task(request):
 
     return JsonResponse({"error": "Invalid request method."}, status=400)
 
+@login_required
 @csrf_exempt
 def reorder_columns(request, board_id):
     if request.method == "POST":
+        board = get_object_or_404(Board, id=board_id)
         data = json.loads(request.body)
         column_ids = data.get("column_ids")  # List of column IDs in new order
         for order, column_id in enumerate(column_ids):
-            column = Column.objects.get(id=column_id)
-            column.column_order = order
-            column.save()
+            column = Column.objects.filter(id=column_id, column_board=board).first()
+            if column:
+                column.column_order = order
+                column.save()
         return JsonResponse({"message": "Columns reordered successfully."})
     return JsonResponse({"error": "Invalid request method."}, status=400)
 
@@ -270,3 +276,7 @@ def create_task_in_column(request, column_id):
 
     return JsonResponse({"error": "Invalid request method."}, status=400)
 
+@login_required
+def get_columns(request, board_id):
+    columns = Column.objects.filter(column_board_id=board_id).values("id", "column_title")
+    return JsonResponse({"columns": list(columns)})

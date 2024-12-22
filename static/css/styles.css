@@ -5,7 +5,7 @@ body {
   color: var(--text-color);
   margin: 0;
   padding: 0;
-  padding-top: 60px; /* Prevent content from being hidden under fixed navbar */
+  padding-top: 60px; /* Prevent content from being hidden under the fixed navbar */
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -15,7 +15,7 @@ h1, h2, h3, h4, h5, h6 {
   margin: 20px 0;
 }
 
-/* Light Mode Variables (Default) */
+/* Light Mode Variables */
 :root {
   --bg-color: #f9f9f9;
   --text-color: #333;
@@ -31,9 +31,9 @@ h1, h2, h3, h4, h5, h6 {
   --modal-border-color: #2424f0;
 
   /* Dark mode overrides */
-  --modal-bg-dark: #f6f4f4;
+  --modal-bg-dark: #1e1e1e;
   --modal-text-color-dark: #e0e0e0;
-  --modal-border-color-dark: #f0eded;
+  --modal-border-color-dark: #444444;
 }
 
 /* Dark Mode Variables */
@@ -46,27 +46,119 @@ body.dark-mode {
   --nav-text: #e0e0e0;
   --dropdown-bg: #2c2c2c;
   --dropdown-text: #e0e0e0;
-  /* background-color: var(--modal-bg-dark);
-  color: var(--modal-text-color-dark);
-  border: 1px solid var(--modal-border-color-dark); */
+}
+
+/* Modal Styling */
+.modal-content .close {
+  color: var(--modal-text-color);
+  transition: color 0.2s ease;
 }
 
 body.dark-mode .modal-content .close {
   color: var(--modal-text-color-dark);
 }
 
-body.dark-mode .modal-content .close:hover {
-  color: var(--modal-text-color-dark);
+.modal-content .close:hover {
+  color: var(--text-color);
 }
 
+body.dark-mode .modal-content .close:hover {
+  color: var(--text-color-dark);
+}
+
+/* Button Styling */
+/* General Button Styling */
+button {
+  font-family: 'Roboto Mono', monospace;
+  background-color: var(--card-bg); /* Button background matches card background */
+  color: var(--text-color); /* Matches general text color */
+  border: 1px solid var(--border-color); /* Border color from theme */
+  border-radius: 5px; /* Smooth rounded corners */
+  padding: 10px 20px; /* Comfortable padding */
+  cursor: pointer; /* Indicates clickable button */
+  font-weight: bold; /* Makes text stand out */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover effect */
+}
+
+button:hover {
+  background-color: var(--border-color); /* Change background on hover */
+  color: white; /* Text turns white for contrast */
+  transform: scale(1.05); /* Subtle zoom effect */
+}
+
+button:focus {
+  outline: none; /* Remove default focus outline */
+  box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.3); /* Focus ring effect */
+}
+
+button:disabled {
+  background-color: #cccccc; /* Gray background for disabled button */
+  color: #666666; /* Subtle text color */
+  cursor: not-allowed; /* Prevent click interactions */
+  transform: none; /* Disable hover effect */
+}
+
+/* Primary Button Styling */
+.primary-button {
+  background-color: var(--nav-bg); /* Matches navigation background */
+  color: var(--nav-text); /* Matches navigation text color */
+  border: none; /* Clean look */
+}
+
+.primary-button:hover {
+  background-color: var(--border-color); /* Slightly darker on hover */
+  color: white; /* High contrast for visibility */
+}
+
+.primary-button:focus {
+  box-shadow: 0 0 5px 2px var(--nav-bg); /* Focus ring matches navigation theme */
+}
+
+/* Secondary Button Styling */
+.secondary-button {
+  background-color: white; /* Neutral background */
+  color: var(--nav-bg); /* Matches navigation background for text */
+  border: 1px solid var(--nav-bg); /* Outline matches navigation background */
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.secondary-button:hover {
+  background-color: #f0f8ff; /* Light blue background on hover */
+  color: #005bb5; /* Darker blue for text on hover */
+}
+
+/* Dark Mode Overrides */
 body.dark-mode button {
-  background-color: #444444; /* Dark button background */
-  color: var(--modal-text-color-dark);
+  background-color: #444444; /* Dark mode neutral background */
+  color: var(--text-color-dark); /* Light text for visibility */
 }
 
 body.dark-mode button:hover {
-  background-color: #555555; /* Slightly lighter hover effect */
+  background-color: #555555; /* Slightly lighter hover effect in dark mode */
 }
+
+body.dark-mode .primary-button {
+  background-color: var(--card-bg); /* Matches card background in dark mode */
+  color: var(--text-color-dark); /* Light text for contrast */
+}
+
+body.dark-mode .primary-button:hover {
+  background-color: var(--border-color); /* Highlight on hover */
+  color: white; /* High contrast for hover state */
+}
+
+body.dark-mode .secondary-button {
+  background-color: var(--card-bg); /* Neutral background for dark mode */
+  color: var(--text-color-dark); /* Matches dark mode text color */
+  border: 1px solid var(--border-color); /* Outline matches border color */
+}
+
+body.dark-mode .secondary-button:hover {
+  background-color: var(--border-color); /* Highlight on hover */
+  color: white; /* High contrast for hover state */
+}
+
 
 /* Navigation Bar */
 .navbar {
@@ -152,30 +244,6 @@ body.dark-mode button:hover {
 .dropdown-menu li a:hover {
   background-color: #444;
   color: white;
-}
-
-/* Buttons for Login and Register */
-.nav-auth {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.btn-auth {
-  text-decoration: none;
-  padding: 8px 12px;
-  border: 1px solid #ffffff;
-  color: white;
-  border-radius: 5px;
-  background-color: black;
-  font-family: 'Roboto Mono', monospace;
-  font-weight: 500;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.btn-auth:hover {
-  background-color: #bbdefb;
-  color: #000000;
 }
 
 /* Dark Mode Toggle */
@@ -268,7 +336,7 @@ body.dark-mode button:hover {
   text-decoration: none;
 }
 
-.modal-content button {
+/* .modal-content button {
   padding: 10px 15px;
   background-color: #1976d2;
   color: white;
@@ -280,7 +348,7 @@ body.dark-mode button:hover {
 
 .modal-content button:hover {
   background-color: #005bb5;
-}
+} */
 
 .modal-content form {
   display: inline;
@@ -394,49 +462,37 @@ body.dark-mode button:hover {
   margin-bottom: 10px;
 }
 
-/* Delete column button */
-.column button {
-  display: block;
-  margin: 10px auto 0;
-  padding: 5px 10px;
-  background-color: #ff4d4d;
-  color: white;
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-}
 
-.column button:hover {
-  background-color: #ff3333;
-}
 
+/* Table Styling */
 table {
-  width: 90%;
+  width: 100%;
   margin: 20px auto;
   border-collapse: collapse;
-  background-color: #fff;
+  background-color: var(--card-bg); /* Uses variable for light/dark compatibility */
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   overflow: hidden;
 }
 
 thead {
-  background-color: #1976d2;
-  color: white;
+  background-color: var(--nav-bg); /* Uses nav background color for consistency */
+  color: var(--nav-text); /* Text color variable */
 }
 
 thead th {
   padding: 15px;
   text-align: left;
   font-weight: bold;
+  font-weight: 400;
 }
 
 tbody tr {
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--border-color); /* Uses border color variable */
 }
 
 tbody tr:nth-child(even) {
-  background-color: #f9f9f9;
+  background-color: var(--bg-color); /* Alternating row color */
 }
 
 tbody td {
@@ -444,21 +500,35 @@ tbody td {
 }
 
 tbody tr:hover {
-  background-color: #e3f2fd;
-  transition: background-color 0.2s ease-in-out;
+  background-color: var(--card-bg); /* Hover effect */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Slight shadow for hover effect */
+  transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
+/* link */
 a {
-  color: #1976d2;
+  color: var(--nav-bg); /* Uses nav background color variable for link color */
   text-decoration: none;
   font-weight: bold;
+  transition: color 0.3s ease; /* Smooth transition for hover effects */
 }
 
 a:hover {
+  color: var(--border-color); /* Uses border color variable for hover effect */
   text-decoration: underline;
 }
 
-.delete-button {
+/* Dark Mode Overrides */
+body.dark-mode a {
+  color: var(--text-color); /* Use text color for better visibility in dark mode */
+}
+
+body.dark-mode a:hover {
+  color: var(--dropdown-text); /* Subtle hover effect for dark mode */
+  text-decoration: underline;
+}
+
+/* .delete-button {
   margin-top: 20px;
   padding: 10px 20px;
   background-color: #ff4d4d;
@@ -472,36 +542,9 @@ a:hover {
 
 .delete-button:hover {
   background-color: #e60000;
-}
+} */
 
-.primary-button {
-  padding: 10px 20px; /* Add padding for a clickable area */
-  background-color: #1976d2; /* Primary blue color */
-  color: white; /* Text color */
-  border: none; /* Remove default border */
-  border-radius: 5px; /* Rounded corners */
-  font-size: 16px; /* Font size for readability */
-  cursor: pointer; /* Pointer cursor on hover */
-  font-weight: bold; /* Bold text */
-  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover effect */
-}
 
-.primary-button:hover {
-  background-color: #005bb5; /* Slightly darker blue on hover */
-  transform: scale(1.05); /* Slight zoom on hover */
-}
-
-.primary-button:focus {
-  outline: none; /* Remove default focus outline */
-  box-shadow: 0 0 5px 2px rgba(25, 118, 210, 0.5); /* Add focus ring */
-}
-
-.primary-button:disabled {
-  background-color: #cccccc; /* Gray background for disabled state */
-  color: #666666; /* Subtle text color for disabled state */
-  cursor: not-allowed; /* Not-allowed cursor for disabled buttons */
-  transform: none; /* Disable hover effect */
-}
 
 /* Task Card Styling */
 .task-card {
@@ -557,22 +600,7 @@ body.dark-mode .task-card p.assigned-user {
   color: #bbdefb; /* Lighter blue for dark mode */
 }
 
-.secondary-button {
-  padding: 10px 20px;
-  background-color: white; /* Neutral background */
-  color: #1976d2; /* Primary color for text */
-  border: 1px solid #1976d2; /* Outline border */
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
 
-.secondary-button:hover {
-  background-color: #f0f8ff; /* Light blue background on hover */
-  color: #005bb5; /* Darker blue text on hover */
-}
 
 .close-modal {
   position: absolute;
@@ -597,4 +625,13 @@ body.dark-mode .task-card p.assigned-user {
       opacity: 1;
       transform: translateY(0);
   }
+}
+
+/* Container for Board List and Button */
+.board-list-container {
+  display: flex;
+  justify-content: space-between; /* Pushes title to left and button to right */
+  align-items: center; /* Vertically aligns elements */
+  margin-bottom: 20px; /* Spacing below the container */
+  padding-right: 20px; /* Aligns the button with the table border */
 }

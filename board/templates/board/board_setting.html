@@ -4,21 +4,34 @@
 
 {% block content %}
 <h1>{{ board.board_title }} - Settings</h1>
-<p>Description: {{ board.board_description }}</p>
+<!-- <p>Description: {{ board.board_description }}</p> -->
 <!-- Delete Board Button -->
 <form id="delete-board-form" method="POST" action="{% url 'delete_board' board.id %}">
     {% csrf_token %}
     <button type="submit" class="delete-button">Delete Board</button>
 </form>
 
+<!-- Save Button -->
+<!-- <form id="save-board-form" method="POST" action="{% url 'delete_board' board.id %}">
+    {% csrf_token %}
+    <button type="submit" class="delete-button">Delete Board</button>
+</form> -->
+<button id="save-board-settings-button" class="primary-button">Save Settings</button>
+
 <!-- Board Columns -->
-<div id="board-columns">
-    {% for column in columns %}
-    <div class="kanban-column" data-column-id="{{ column.id }}">
-        <h3>{{ column.column_title }}</h3>
-        <button class="delete-column-button secondary-button" data-column-id="{{ column.id }}">-</button>
+<div id="kanban"> 
+    <div id="board-columns" data-board-id="{{ board.id }}">
+        {% for column in columns %}
+        <div class="kanban-column" data-column-id="{{ column.id }}">
+            <h3>{{ column.column_title }}</h3>
+            <button 
+                class="delete-column-button secondary-button" 
+                data-column-id="{{ column.id }}" >
+                -
+            </button>
+        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
 </div>
 
 {% csrf_token %}
@@ -46,8 +59,7 @@
     </div>
 </div>
 
-<!-- Save Button -->
-<button id="save-board-settings-button" class="primary-button">Save Settings</button>
+
 
 
 

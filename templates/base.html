@@ -24,11 +24,7 @@
         <ul class="nav-links">
             <!-- Board Section -->
             <li class="nav-dropdown">
-                <a href="#">Board</a>
-                <ul class="dropdown-menu">
-                    <li><a href="{% url 'board_list' %}">Board List</a></li>
-                    <li><a href="{% url 'create_board' %}">Create Board</a></li>
-                </ul>
+                <a href="{% url 'board_list' %}">Board</a>
             </li>
             <!-- Task Section -->
             <li class="nav-dropdown">
@@ -49,11 +45,11 @@
           {% if user.is_authenticated %}
               <form method="POST" action="{% url 'logout' %}" style="display: inline;">
                   {% csrf_token %}
-                  <button type="submit" class="btn-auth logout-btn">Logout</button>
+                  <button type="submit" class="logout-btn">Logout</button>
               </form>
           {% else %}
-              <a href="{% url 'login' %}" class="btn-auth">Login</a>
-              <a href="{% url 'register' %}" class="btn-auth register-btn">Register</a>
+              <a href="{% url 'login' %}" class="">Login</a>
+              <a href="{% url 'register' %}" class="register-btn">Register</a>
           {% endif %}
           <button id="darkModeToggle" class="dark-mode-toggle">🌙</button>
       </div>

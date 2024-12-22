@@ -3,13 +3,21 @@
 {% block title %}Board List{% endblock %}
 
 {% block content %}
-    <h1>My Boards</h1>
+    <div class="board-list-container">
+        <h1>My Boards</h1>
+        <!-- Create Board Button -->
+        <div class="create-board-button-wrapper">
+            <a href="{% url 'create_board' %}" class="create-board-button">
+                <button class="primary-button">+ Create Board</button>
+            </a>
+        </div>
+    </div>
+
     <table>
         <thead>
             <tr>
                 <th>Board Title</th>
                 <th>Description</th>
-                <th>Created By</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -18,7 +26,6 @@
             <tr>
                 <td>{{ item.board.board_title }}</td>
                 <td>{{ item.board.board_description }}</td>
-                <td>{{ item.board.board_created_by.username }}</td>
                 <td>
                     <a href="{% url 'board_display' item.board.id %}">View</a>
                     {% if item.is_creator %}

@@ -14,7 +14,7 @@
 
 <!-- Board Columns as Kanban -->
 <!-- <div id="kanban" style="display: flex; gap: 20px;"> -->
- <div id="kanban">
+ <div id="kanban" data-board-id="{{ board.id }}">
   {% for column in columns %}
   <div class="kanban-column" data-column-id="{{ column.id }}">
       <h3>{{ column.column_title }}</h3>

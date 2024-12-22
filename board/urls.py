@@ -15,5 +15,6 @@ urlpatterns = [
     path('<int:column_id>/add-task/', views.add_task_to_column, name='add_task_to_column'),
     path('<int:column_id>/create-task/', views.create_task_in_column, name='create_task_in_column'),
     path('move-task/', views.move_task, name='move_task'),
+    path("<int:board_id>/columns/", views.get_columns, name="get_columns"),
 ]
 

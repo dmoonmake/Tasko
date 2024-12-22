@@ -17,6 +17,94 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
+    // Utility: Fetch all columns and render
+    async function fetchAndRenderColumns() {
+        const url = `/boards/${boardId}/columns/`; // Endpoint to fetch all columns
+        const data = await fetchWithErrorHandling(url, { method: "GET" });
+
+        if (data?.columns) {
+            const boardColumns = document.getElementById("board-columns");
+            boardColumns.innerHTML = ""; // Clear current columns
+
+            // Render all columns dynamically
+            data.columns.forEach((column) => {
+                addColumnToBoard(column);
+            });
+        }
+    }
+
+    // Utility: Add column dynamically
+    function addColumnToBoard(column) {
+        const boardColumns = document.getElementById("board-columns");
+        const columnDiv = document.createElement("div");
+        columnDiv.classList.add("kanban-column"); // Add your column class
+        columnDiv.dataset.columnId = column.id; // Set column ID
+        // columnDiv.style.border = "1px solid #ccc"; // Add inline styles if needed
+        // columnDiv.style.padding = "10px";
+
+        columnDiv.innerHTML = `
+            <h3>${column.column_title}</h3>
+            <button class="delete-column-button secondary-button" data-column-id="${column.id}">
+                -
+            </button>
+        `;
+        boardColumns.appendChild(columnDiv);
+
+        // Reinitialize drag-and-drop after adding the column
+        initializeDragAndDrop();
+
+        // Ensure the secondary button styling is applied immediately
+        const deleteButton = columnDiv.querySelector(".delete-column-button");
+        if (deleteButton) {
+            deleteButton.classList.add("secondary-button"); // Ensure class is applied dynamically
+        }
+    }
+
+    // Save Board Settings and Redirect
+    async function saveBoardSettings() {
+        const boardColumns = document.getElementById("board-columns");
+        const columnIds = Array.from(boardColumns.children).map((column) => column.dataset.columnId);
+
+        const url = `/boards/${boardId}/columns/reorder/`;
+        const data = await fetchWithErrorHandling(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": csrfToken,
+            },
+            body: JSON.stringify({ column_ids: columnIds }),
+        });
+
+        if (data?.message) {
+            console.log("Board settings saved successfully. Redirecting...");
+            window.location.href = `/boards/${boardId}/display/`; // Redirect after saving
+        }
+    }
+
+    // Initialize Drag-and-Drop
+    function initializeDragAndDrop() {
+        const boardColumns = document.getElementById("board-columns");
+        const saveBoardSettingsButton = document.getElementById("save-board-settings-button");
+        const boardId = boardColumns.dataset.boardId; // Ensure boardId is set
+
+        if (!boardId) {
+            console.error("Board ID is missing.");
+            return;
+        }
+
+        if (boardColumns) {
+            new Sortable(boardColumns, {
+                animation: 150,
+                onEnd: function () {
+                    console.log("Columns reordered. Click 'Save Board Settings' to persist.");
+                    saveBoardSettingsButton.style.display = "block";
+                },
+            });
+
+            saveBoardSettingsButton.addEventListener("click", saveBoardSettings);
+        }
+    }
+        
     // Add Column
     function setupAddColumn() {
         const addColumnButton = document.getElementById("add-column-button");
@@ -31,7 +119,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             addColumnForm.addEventListener("submit", async function (e) {
                 e.preventDefault();
-                console.log("Form submitted!");
 
                 const columnTitle = addColumnForm.querySelector("input[name='column_title']").value;
                 const url = `/boards/${boardId}/columns/create/`;
@@ -46,20 +133,23 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
 
                 if (data?.id) {
-                    const boardColumns = document.getElementById("board-columns");
-                    const newColumn = document.createElement("div");
-                    newColumn.classList.add("column");
-                    newColumn.dataset.columnId = data.id;
-                    newColumn.innerHTML = `
-                        <h3>${data.name}</h3>
-                        <button class="delete-column-button primary-button" data-column-id="${data.id}">
-                            Delete
-                        </button>`;
-                    boardColumns.appendChild(newColumn);
-                    addColumnModal.style.display = "none";
+                    await fetchAndRenderColumns(); 
+                    addColumnModal.style.display = "none"; // Close the modal
+                    addColumnForm.reset(); // Reset the form
                 }
             });
         }
+
+        // Close modal functionality
+        window.closeAddColumnModal = function () {
+            addColumnModal.style.display = "none";
+        };
+
+        window.addEventListener("click", (e) => {
+            if (e.target === addColumnModal) {
+                closeAddColumnModal();
+            }
+        });
     }
 
     // Delete Column
@@ -84,26 +174,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 const data = await response.json();
 
                 if (data.success) {
-
-
-                    // Re-render the board dynamically
-                    const boardColumns = document.getElementById("board-columns");
-                    boardColumns.innerHTML = ""; // Clear the current columns
-
-                    // Add the updated columns to the DOM
-                    data.columns.forEach((column) => {
-                        const columnDiv = document.createElement("div");
-                        columnDiv.classList.add("column");
-                        columnDiv.dataset.columnId = column.id;
-                        columnDiv.innerHTML = `
-                            <h3>${column.column_title}</h3>
-                            <button class="delete-column-button primary-button" data-column-id="${column.id}">Delete</button>
-                        `;
-                        boardColumns.appendChild(columnDiv);
-                    });
-                    // alert(data.message); // Show success message
-                } else {
-                    alert(data.error); // Display error if tasks exist or another issue occurs
+                    await fetchAndRenderColumns(); 
                 }
             }
         });
@@ -135,45 +206,47 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Drag-and-Drop for Columns
-    function setupDragAndDrop() {
-        const boardColumns = document.getElementById("board-columns");
-        const saveBoardSettingsButton = document.getElementById("save-board-settings-button");
+    // function setupDragAndDrop() {
+    //     const boardColumns = document.getElementById("board-columns");
+    //     const saveBoardSettingsButton = document.getElementById("save-board-settings-button");
 
-        if (boardColumns && saveBoardSettingsButton) {
-            new Sortable(boardColumns, {
-                animation: 150,
-                onEnd: function () {
-                    console.log("Columns reordered temporarily. Click 'Save Board Settings' to persist.");
-                    saveBoardSettingsButton.style.display = "block";
-                },
-            });
+    //     if (boardColumns && saveBoardSettingsButton) {
+    //         new Sortable(boardColumns, {
+    //             animation: 150,
+    //             onEnd: function () {
+    //                 console.log("Columns reordered temporarily. Click 'Save Board Settings' to persist.");
+    //                 saveBoardSettingsButton.style.display = "block";
+    //             },
+    //         });
 
-            saveBoardSettingsButton.addEventListener("click", async function () {
-                const columnIds = Array.from(boardColumns.children).map((column) => column.dataset.columnId);
-                const url = `/boards/${boardId}/columns/reorder/`;
+    //         saveBoardSettingsButton.addEventListener("click", async function () {
+    //             const columnIds = Array.from(boardColumns.children).map((column) => column.dataset.columnId);
+    //             const url = `/boards/${boardId}/columns/reorder/`;
 
-                const data = await fetchWithErrorHandling(url, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "X-CSRFToken": csrfToken,
-                    },
-                    body: JSON.stringify({ column_ids: columnIds }),
-                });
+    //             const data = await fetchWithErrorHandling(url, {
+    //                 method: "POST",
+    //                 headers: {
+    //                     "Content-Type": "application/json",
+    //                     "X-CSRFToken": csrfToken,
+    //                 },
+    //                 body: JSON.stringify({ column_ids: columnIds }),
+    //             });
 
-                if (data?.message) {
-                    console.log("Board settings saved successfully.");
-                    window.location.href = `/boards/${boardId}/display/`; // Redirect to task display page
-                }
-            });
-        }
-    }
+    //             if (data?.message) {
+    //                 console.log("Board settings saved successfully.");
+    //                 window.location.href = `/boards/${boardId}/display/`; // Redirect to task display page
+    //             }
+    //         });
+    //     }
+    // }
 
     // Initialize all functions
     setupAddColumn();
     setupDeleteColumn();
     setupDeleteBoard();
-    setupDragAndDrop();
+    // setupDragAndDrop();
+    initializeDragAndDrop();
+    
 });
 
 document.addEventListener("DOMContentLoaded", function () {
