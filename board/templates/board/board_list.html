@@ -1,21 +1,41 @@
 {% extends "base.html" %}
 
-{% block title %}Boards{% endblock %}
+{% block title %}Board List{% endblock %}
 
 {% block content %}
-<h1>Your Boards</h1>
+    <div class="board-list-container">
+        <h1>My Boards</h1>
+        <!-- Create Board Button -->
+        <div class="create-board-button-wrapper">
+            <a href="{% url 'create_board' %}" class="create-board-button">
+                <button class="primary-button">+ Create Board</button>
+            </a>
+        </div>
+    </div>
 
-{% if boards %}
-    <ul>
-        {% for board in boards %}
-        <li>
-            <a href="{% url 'board_detail' board.id %}">{{ board.title }}</a>
-        </li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'create_board' %}">Create New Board</a>
-{% else %}
-    <p>No boards to display.</p>
-    <p>Please log in or create a board to get started.</p>
-{% endif %}
+    <table>
+        <thead>
+            <tr>
+                <th>Board Title</th>
+                <th>Description</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in boards %}
+            <tr>
+                <td>{{ item.board.board_title }}</td>
+                <td>{{ item.board.board_description }}</td>
+                <td>
+                    <a href="{% url 'board_display' item.board.id %}">View</a>
+                    {% if item.is_creator %}
+                        | <a href="{% url 'board_setting' item.board.id %}">Settings</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
 {% endblock %}

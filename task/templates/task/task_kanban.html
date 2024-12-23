@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Task List{% endblock %}
+
+{% block content %}
+<h1>My Tasks: Kanban Board</h1>
+<div id="kanban">
+  <div class="kanban-column">
+      <h3>To-Do</h3>
+
+      <div class="task-container" id="todo">
+          {% for task in tasks %}
+              {% if task.task_status == 'To-Do' %}
+              <div class="task" data-id="{{ task.id }}" onclick="openTaskModal({{ task.id }})">
+                  {{ task.task_title }}
+                  <br>
+                  {{ task.task_deadline }}
+              </div>
+              {% endif %}
+          {% endfor %}
+      </div>
+  </div>
+  <div class="kanban-column">
+      <h3>In Progress</h3>
+      <div class="task-container" id="inprogress">
+          {% for task in tasks %}
+              {% if task.task_status == 'In Progress' %}
+              <div class="task" data-id="{{ task.id }}" onclick="openTaskModal({{ task.id }})">
+                {{ task.task_title }}
+                <br>
+                {{ task.task_deadline }}
+              </div>
+              {% endif %}
+          {% endfor %}
+      </div>
+  </div>
+  <div class="kanban-column">
+      <h3>Done</h3>
+      <div class="task-container" id="done">
+          {% for task in tasks %}
+              {% if task.task_status == 'Done' %}
+              <div class="task" data-id="{{ task.id }}" onclick="openTaskModal({{ task.id }})">
+                {{ task.task_title }}
+                <br>
+                {{ task.task_deadline }}
+              </div>
+              {% endif %}
+          {% endfor %}
+      </div>
+  </div>
+</div>
+
+<!-- Edit/Delete Task Modal -->
+<div id="task-modal" class="modal" style="display: none;">
+  <div class="modal-content">
+      <span class="close" onclick="closeTaskModal()">&times;</span>
+      <h3 id="task-modal-title"></h3>
+      <p><strong>Description:</strong> <span id="task-modal-description"></span></p>
+      <p><strong>Status:</strong> <span id="task-modal-status"></span></p>
+      <p><strong>Priority:</strong> <span id="task-modal-priority"></span></p>
+      <p><strong>Deadline:</strong> <span id="task-modal-deadline"></span></p>
+      <p><strong>Assigned to:</strong> <span id="task-modal-assigned-to"></span></p>
+
+      <!-- Action Buttons -->
+      <a id="edit-task-link" href="#">
+          <button>Edit</button>
+      </a>
+      <form id="delete-task-form" method="POST" style="display: inline;">
+          {% csrf_token %}
+          <button type="submit">Delete</button>
+      </form>
+  </div>
+</div>
+
+<!-- Include the JavaScript file -->
+{% load static %}
+<script src="{% static 'task/js/task_scripts.js' %}"></script>
+{% endblock %}

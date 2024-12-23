@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}{{ board.title }} - Settings{% endblock %}
+
+{% block content %}
+<h1>{{ board.board_title }} - Settings</h1>
+<!-- <p>Description: {{ board.board_description }}</p> -->
+<!-- Delete Board Button -->
+<form id="delete-board-form" method="POST" action="{% url 'delete_board' board.id %}">
+    {% csrf_token %}
+    <button type="submit" class="delete-button">Delete Board</button>
+</form>
+
+<!-- Save Button -->
+<!-- <form id="save-board-form" method="POST" action="{% url 'delete_board' board.id %}">
+    {% csrf_token %}
+    <button type="submit" class="delete-button">Delete Board</button>
+</form> -->
+<button id="save-board-settings-button" class="primary-button">Save Settings</button>
+
+<!-- Board Columns -->
+<div id="kanban"> 
+    <div id="board-columns" data-board-id="{{ board.id }}">
+        {% for column in columns %}
+        <div class="kanban-column" data-column-id="{{ column.id }}">
+            <h3>{{ column.column_title }}</h3>
+            <button 
+                class="delete-column-button secondary-button" 
+                data-column-id="{{ column.id }}" >
+                -
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% csrf_token %}
+<div id="board-data" data-board-id="{{ board.id }}"></div>
+
+<!-- Button to Add Column -->
+<button id="add-column-button" class="secondary-button">Add Column</button>
+<!-- Modal for Adding Column -->
+<!-- <div id="add-column-modal" style="display: none;">
+    <form id="add-column-form">
+        <input type="text" name="column_title" placeholder="Column Title" required>
+        <button type="submit">Save</button>
+    </form>
+</div> -->
+
+<div id="add-column-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="closeAddColumnModal()">&times;</span>
+        <h3>Add New Column</h3>
+        <form id="add-column-form">
+            {% csrf_token %}
+            <input type="text" name="column_title" placeholder="Column Title" required>
+            <button type="submit" class="primary-button">Save</button>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+{% load static %}
+<script src="{% static 'board/js/board_setting.js' %}"></script>
+
+{% endblock %}

@@ -107,8 +107,8 @@ h1 {
 
 /* Table Styles */
 table {
-  width: 90%;
-  margin: 20px auto;
+  width: 100%;
+  margin-top: 20px;
   border-collapse: collapse;
   background-color: #fff;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -182,5 +182,19 @@ tfoot td {
     text-align: left;
     font-weight: bold;
   }
+}
+
+/* Container for Board List and Button */
+.board-list-container {
+  display: flex;
+  justify-content: space-between; /* Pushes title to left and button to right */
+  align-items: center; /* Vertically aligns elements */
+  margin-bottom: 20px; /* Spacing below the container */
+  padding-right: 20px; /* Aligns the button with the table border */
+}
+
+/* Create Board Button Styling */
+.create-board-button {
+  text-decoration: none;
 }
 

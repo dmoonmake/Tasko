@@ -9,6 +9,7 @@
       <h1>Edit Task: {{ task.task_title }}</h1>
       <form method="POST">
           {% csrf_token %}
+          <input type="hidden" name="referrer" value="{{ referrer }}">
           {{ form.as_p }}
           <button type="submit">Save Changes</button>
       </form>

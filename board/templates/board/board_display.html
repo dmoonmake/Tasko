@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}{{ board.board_title }}{% endblock %}
+
+{% block content %}
+<h1>{{ board.board_title }}</h1>
+
+<!-- Conditional Board Settings Button -->
+{% if is_creator %}
+<a href="{% url 'board_setting' board.id %}">
+    <button id="board-settings-button">Board Settings</button>
+</a>
+{% endif %}
+
+<!-- Board Columns as Kanban -->
+<!-- <div id="kanban" style="display: flex; gap: 20px;"> -->
+ <div id="kanban" data-board-id="{{ board.id }}">
+  {% for column in columns %}
+  <div class="kanban-column" data-column-id="{{ column.id }}">
+      <h3>{{ column.column_title }}</h3>
+      <button class="add-task-button">+</button>
+
+      <div class="task-container" id="tasks-column-{{ column.id }}">
+          {% for task in column.tasks.all %}
+          <div class="task-card" draggable="true" data-task-id="{{ task.id }}"" onclick="openTaskModal({{ task.id }})">
+              {{ task.task_title }}
+              <!-- <p class="task-status">Status: {{ task.task_status }}</p> -->
+              {% if task.task_assigned_to %}
+                >> <span class="assigned-user">{{ task.task_assigned_to.username }}</span>
+              {% else %}
+                >> <span class="assigned-user unassigned">Unassigned</span>
+              {% endif %}
+          </div>
+          {% endfor %}
+
+          <!-- Edit/Delete Task Modal -->
+          <div id="task-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeTaskModal()">&times;</span>
+                <h3 id="task-modal-title"></h3>
+                <p><strong>Description:</strong> <span id="task-modal-description"></span></p>
+                <p><strong>Status:</strong> <span id="task-modal-status"></span></p>
+                <p><strong>Priority:</strong> <span id="task-modal-priority"></span></p>
+                <p><strong>Deadline:</strong> <span id="task-modal-deadline"></span></p>
+                <p><strong>Assigned to:</strong> <span id="task-modal-assigned-to"></span></p>
+
+                <!-- Action Buttons -->
+                <a id="edit-task-link" href="#">
+                    <button>Edit</button>
+                </a>
+                <form id="delete-task-form" method="POST" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit">Delete</button>
+                </form>
+            </div>
+          </div>
+
+          <!-- Add Task Modal -->
+          <div id="add-task-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span class="close" onclick="closeAddTaskModal()">&times;</span>
+                <h3>Add Task</h3>
+                <form id="add-task-form">
+                    {% csrf_token %}
+                    <input type="hidden" id="column-id" name="column_id">
+                    <input type="text" name="task_title" placeholder="Task Title" required>
+                    <button type="submit">Add Task</button>
+                </form>
+            </div>
+          </div>
+
+      </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% load static %}
+<script src="{% static 'board/js/board_task.js' %}"></script>
+
+{% endblock %}

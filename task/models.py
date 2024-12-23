@@ -2,7 +2,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.timezone import now
-from board.models import Column
 
 class Task(models.Model):
   STATUS_CHOICES = [
@@ -26,7 +25,7 @@ class Task(models.Model):
   task_updated_at = models.DateTimeField(auto_now=True, verbose_name="Last Updated")
   task_deadline = models.DateField(blank=True, null=True, verbose_name="Deadline")
   task_closed_at = models.DateTimeField(null=True, blank=True) # Track close date
-  task_column = models.ForeignKey(Column, on_delete=models.CASCADE, null=True, blank=True, related_name="tasks")
+  task_column = models.ForeignKey('board.Column', on_delete=models.CASCADE, null=True, blank=True, related_name="tasks")
 
 class Meta:
   ordering = ["-task_priority", "task_status", "task_created_at"]
@@ -39,9 +38,17 @@ def __str__(self):
 def save(self, *args, **kwargs):
     # Automatically update task_closed_at when task_status is "Done"
     if self.task_status == "Done" and not self.task_closed_at:
-        self.task_closed_at = now()
+      self.task_closed_at = now()
     elif self.task_status != "Done" and self.task_closed_at:
-        self.task_closed_at = None  # Clear the closed_at field if the status is changed from "Done"
+      self.task_closed_at = None  # Clear the closed_at field if the status is changed from "Done"
+    
+    if self.task_column:
+      if self.task_column.column_order == 0:  # Leftmost column
+        self.task_status = "To-Do"
+      elif self.task_column.column_order == self.task_column.column_board.columns.count() - 1:  # Rightmost column
+        self.task_status = "Done"
+      else:
+        self.task_status = "In Progress"
     super().save(*args, **kwargs)
 
 def is_overdue(self):
@@ -49,3 +56,4 @@ def is_overdue(self):
   if self.task_deadline and not self.task_closed_at:
     return self.task_deadline < now()
   return False
+

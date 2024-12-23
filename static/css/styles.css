@@ -5,7 +5,7 @@ body {
   color: var(--text-color);
   margin: 0;
   padding: 0;
-  padding-top: 60px; /* Prevent content from being hidden under fixed navbar */
+  padding-top: 60px; /* Prevent content from being hidden under the fixed navbar */
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -15,16 +15,25 @@ h1, h2, h3, h4, h5, h6 {
   margin: 20px 0;
 }
 
-/* Light Mode Variables (Default) */
+/* Light Mode Variables */
 :root {
   --bg-color: #f9f9f9;
   --text-color: #333;
   --card-bg: #fff;
-  --border-color: #ddd;
+  --border-color: blue;
   --nav-bg: #1976d2;
   --nav-text: white;
   --dropdown-bg: white;
   --dropdown-text: black;
+
+  --modal-bg: #f7f6f6;
+  --modal-text-color: #323030;
+  --modal-border-color: #2424f0;
+
+  /* Dark mode overrides */
+  --modal-bg-dark: #1e1e1e;
+  --modal-text-color-dark: #e0e0e0;
+  --modal-border-color-dark: #444444;
 }
 
 /* Dark Mode Variables */
@@ -32,12 +41,124 @@ body.dark-mode {
   --bg-color: #121212;
   --text-color: #e0e0e0;
   --card-bg: #1e1e1e;
-  --border-color: #333;
+  --border-color: white;
   --nav-bg: #1e1e1e;
   --nav-text: #e0e0e0;
   --dropdown-bg: #2c2c2c;
   --dropdown-text: #e0e0e0;
 }
+
+/* Modal Styling */
+.modal-content .close {
+  color: var(--modal-text-color);
+  transition: color 0.2s ease;
+}
+
+body.dark-mode .modal-content .close {
+  color: var(--modal-text-color-dark);
+}
+
+.modal-content .close:hover {
+  color: var(--text-color);
+}
+
+body.dark-mode .modal-content .close:hover {
+  color: var(--text-color-dark);
+}
+
+/* Button Styling */
+/* General Button Styling */
+button {
+  font-family: 'Roboto Mono', monospace;
+  background-color: var(--card-bg); /* Button background matches card background */
+  color: var(--text-color); /* Matches general text color */
+  border: 1px solid var(--border-color); /* Border color from theme */
+  border-radius: 5px; /* Smooth rounded corners */
+  padding: 10px 20px; /* Comfortable padding */
+  cursor: pointer; /* Indicates clickable button */
+  font-weight: bold; /* Makes text stand out */
+  transition: background-color 0.3s ease, transform 0.2s ease; /* Smooth hover effect */
+}
+
+button:hover {
+  background-color: var(--border-color); /* Change background on hover */
+  color: white; /* Text turns white for contrast */
+  transform: scale(1.05); /* Subtle zoom effect */
+}
+
+button:focus {
+  outline: none; /* Remove default focus outline */
+  box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.3); /* Focus ring effect */
+}
+
+button:disabled {
+  background-color: #cccccc; /* Gray background for disabled button */
+  color: #666666; /* Subtle text color */
+  cursor: not-allowed; /* Prevent click interactions */
+  transform: none; /* Disable hover effect */
+}
+
+/* Primary Button Styling */
+.primary-button {
+  background-color: var(--nav-bg); /* Matches navigation background */
+  color: var(--nav-text); /* Matches navigation text color */
+  border: none; /* Clean look */
+}
+
+.primary-button:hover {
+  background-color: var(--border-color); /* Slightly darker on hover */
+  color: white; /* High contrast for visibility */
+}
+
+.primary-button:focus {
+  box-shadow: 0 0 5px 2px var(--nav-bg); /* Focus ring matches navigation theme */
+}
+
+/* Secondary Button Styling */
+.secondary-button {
+  background-color: white; /* Neutral background */
+  color: var(--nav-bg); /* Matches navigation background for text */
+  border: 1px solid var(--nav-bg); /* Outline matches navigation background */
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.secondary-button:hover {
+  background-color: #f0f8ff; /* Light blue background on hover */
+  color: #005bb5; /* Darker blue for text on hover */
+}
+
+/* Dark Mode Overrides */
+body.dark-mode button {
+  background-color: #444444; /* Dark mode neutral background */
+  color: var(--text-color-dark); /* Light text for visibility */
+}
+
+body.dark-mode button:hover {
+  background-color: #555555; /* Slightly lighter hover effect in dark mode */
+}
+
+body.dark-mode .primary-button {
+  background-color: var(--card-bg); /* Matches card background in dark mode */
+  color: var(--text-color-dark); /* Light text for contrast */
+}
+
+body.dark-mode .primary-button:hover {
+  background-color: var(--border-color); /* Highlight on hover */
+  color: white; /* High contrast for hover state */
+}
+
+body.dark-mode .secondary-button {
+  background-color: var(--card-bg); /* Neutral background for dark mode */
+  color: var(--text-color-dark); /* Matches dark mode text color */
+  border: 1px solid var(--border-color); /* Outline matches border color */
+}
+
+body.dark-mode .secondary-button:hover {
+  background-color: var(--border-color); /* Highlight on hover */
+  color: white; /* High contrast for hover state */
+}
+
 
 /* Navigation Bar */
 .navbar {
@@ -125,30 +246,6 @@ body.dark-mode {
   color: white;
 }
 
-/* Buttons for Login and Register */
-.nav-auth {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.btn-auth {
-  text-decoration: none;
-  padding: 8px 12px;
-  border: 1px solid #ffffff;
-  color: white;
-  border-radius: 5px;
-  background-color: black;
-  font-family: 'Roboto Mono', monospace;
-  font-weight: 500;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.btn-auth:hover {
-  background-color: #bbdefb;
-  color: #000000;
-}
-
 /* Dark Mode Toggle */
 .dark-mode-toggle {
   background: none;
@@ -209,7 +306,9 @@ body.dark-mode {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: var(--modal-bg);
+  color: var(--modal-text-color);
+  border: 1px solid var(--modal-border-color);
 }
 
 .modal-content {
@@ -220,6 +319,39 @@ body.dark-mode {
   border-radius: 5px;
   width: 50%;
   position: relative;
+}
+
+.modal-content .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #aaa;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.modal-content .close:hover {
+  color: black;
+  text-decoration: none;
+}
+
+/* .modal-content button {
+  padding: 10px 15px;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.modal-content button:hover {
+  background-color: #005bb5;
+} */
+
+.modal-content form {
+  display: inline;
 }
 
 .close {
@@ -300,4 +432,206 @@ body.dark-mode {
   margin-top: -50px; /* Move content upward slightly */
 }
 
+/* Container for board columns */
+#board-columns {
+  display: flex; /* Enables horizontal layout */
+  gap: 20px; /* Adds spacing between columns */
+  justify-content: flex-start; /* Aligns columns to the left */
+  align-items: flex-start; /* Aligns columns vertically at the top */
+  overflow-x: auto; /* Allows horizontal scrolling if there are too many columns */
+  padding: 10px;
+  scrollbar-width: thin; /* Firefox */
+  width: 100%; /* Ensures container spans full width */
+  box-sizing: border-box;
+}
 
+/* Individual column styling */
+.column {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  width: 200px; /* Fixed width for each column */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0; /* Prevents columns from shrinking */
+}
+
+/* Column title */
+.column h3 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+
+
+/* Table Styling */
+table {
+  width: 100%;
+  margin: 20px auto;
+  border-collapse: collapse;
+  background-color: var(--card-bg); /* Uses variable for light/dark compatibility */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+thead {
+  background-color: var(--nav-bg); /* Uses nav background color for consistency */
+  color: var(--nav-text); /* Text color variable */
+}
+
+thead th {
+  padding: 15px;
+  text-align: left;
+  font-weight: bold;
+  font-weight: 400;
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--border-color); /* Uses border color variable */
+}
+
+tbody tr:nth-child(even) {
+  background-color: var(--bg-color); /* Alternating row color */
+}
+
+tbody td {
+  padding: 15px;
+}
+
+tbody tr:hover {
+  background-color: var(--card-bg); /* Hover effect */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Slight shadow for hover effect */
+  transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+/* link */
+a {
+  color: var(--nav-bg); /* Uses nav background color variable for link color */
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease; /* Smooth transition for hover effects */
+}
+
+a:hover {
+  color: var(--border-color); /* Uses border color variable for hover effect */
+  text-decoration: underline;
+}
+
+/* Dark Mode Overrides */
+body.dark-mode a {
+  color: var(--text-color); /* Use text color for better visibility in dark mode */
+}
+
+body.dark-mode a:hover {
+  color: var(--dropdown-text); /* Subtle hover effect for dark mode */
+  text-decoration: underline;
+}
+
+/* .delete-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.delete-button:hover {
+  background-color: #e60000;
+} */
+
+
+
+/* Task Card Styling */
+.task-card {
+  border: 1px solid var(--border-color); /* Add a border */
+  border-radius: 5px; /* Rounded corners */
+  padding: 10px; /* Add spacing inside the card */
+  margin-bottom: 10px; /* Space between cards */
+  background-color:var(--card-bg); /* Light background color */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  cursor: grab; /* Indicate draggable */
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Add smooth hover effect */
+}
+
+.task-card:hover {
+  transform: scale(1.02); /* Slight zoom on hover */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Enhanced shadow on hover */
+}
+
+/* Assigned User Styling */
+.task-card p {
+  margin: 5px 0; /* Space between lines */
+  font-size: 0.9rem; /* Slightly smaller text for details */
+  color: var(--text-color); /* Subtle text color */
+}
+
+/* Assigned User Highlight */
+.task-card p.assigned-user {
+  font-weight: bold; /* Highlight assigned user */
+  color: #1976d2; /* Use a primary color */
+}
+
+/* Interactive Effects */
+.task-card:focus,
+.task-card:hover {
+    outline: none; /* Remove default focus outline */
+    border-color: #1976d2; /* Highlight border on hover or focus */
+}
+
+.task-card p.unassigned {
+  color: #888; /* Subtle color for unassigned text */
+}
+
+body.dark-mode .task-card {
+  background-color: var(--card-bg); /* Use dark mode background */
+  border-color: var(--border-color); /* Match border to dark theme */
+}
+
+body.dark-mode .task-card p {
+  color: var(--text-color); /* Adapt text color */
+}
+
+body.dark-mode .task-card p.assigned-user {
+  color: #bbdefb; /* Lighter blue for dark mode */
+}
+
+
+
+.close-modal {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  color: #888;
+  cursor: pointer;
+}
+
+.close-modal:hover {
+  color: #000;
+}
+
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+      transform: translateY(-10%);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+/* Container for Board List and Button */
+.board-list-container {
+  display: flex;
+  justify-content: space-between; /* Pushes title to left and button to right */
+  align-items: center; /* Vertically aligns elements */
+  margin-bottom: 20px; /* Spacing below the container */
+  padding-right: 20px; /* Aligns the button with the table border */
+}

@@ -24,44 +24,32 @@
         <ul class="nav-links">
             <!-- Board Section -->
             <li class="nav-dropdown">
-                <a href="#">Board</a>
-                <ul class="dropdown-menu">
-                    <li><a href="{% url 'board_list' %}">Board List</a></li>
-                    <li><a href="{% url 'create_board' %}">Create Board</a></li>
-                </ul>
+                <a href="{% url 'board_list' %}">Board</a>
             </li>
             <!-- Task Section -->
             <li class="nav-dropdown">
                 <a href="#">Task</a>
                 <ul class="dropdown-menu">
-                    <li><a href="{% url 'task_list' %}">Task List</a></li>
-                    <li><a href="{% url 'task_create' %}">Create Task</a></li>
-                    <li><a href="{% url 'task_list_table' %}">Task Table</a></li>
+                    <li><a href="{% url 'task_kanban' %}">Task Kanban</a></li>
+                    <li><a href="{% url 'task_table' %}">Task Table</a></li>
                 </ul>
             </li>
             <!-- Report Section -->
-            <li><a href="#">Report</a></li>
+            <li> || <a href="#">Report </a></li>
+            <!-- Tooling Section -->
+            <li><a href="#">Tools </a></li>
+
         </ul>
 
-        <!-- Right-Side Navigation -->
-        <!-- <div class="nav-auth">
-            {% if user.is_authenticated %}
-                <a href="{% url 'logout' %}" class="btn-auth logout-btn">Logout</a>
-            {% else %}
-                <a href="{% url 'login' %}" class="btn-auth">Login</a>
-                <a href="{% url 'register' %}" class="btn-auth register-btn">Register</a>
-            {% endif %}
-            <button id="darkModeToggle" class="dark-mode-toggle">🌙</button>
-        </div> -->
         <div class="nav-auth">
           {% if user.is_authenticated %}
               <form method="POST" action="{% url 'logout' %}" style="display: inline;">
                   {% csrf_token %}
-                  <button type="submit" class="btn-auth logout-btn">Logout</button>
+                  <button type="submit" class="logout-btn">Logout</button>
               </form>
           {% else %}
-              <a href="{% url 'login' %}" class="btn-auth">Login</a>
-              <a href="{% url 'register' %}" class="btn-auth register-btn">Register</a>
+              <a href="{% url 'login' %}" class="">Login</a>
+              <a href="{% url 'register' %}" class="register-btn">Register</a>
           {% endif %}
           <button id="darkModeToggle" class="dark-mode-toggle">🌙</button>
       </div>
@@ -102,5 +90,7 @@
           });
       });
   </script>
+  {% load static %}
+  <script src="{% static 'js/task_modal.js' %}"></script>
 </body>
 </html>

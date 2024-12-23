@@ -3,14 +3,16 @@ from .models import Board, Column
 from django.contrib.auth.models import User
 
 class BoardForm(forms.ModelForm):
-    users = forms.ModelMultipleChoiceField(
+    board_members = forms.ModelMultipleChoiceField(
         queryset=User.objects.all(),
-        required=False,
-        widget=forms.SelectMultiple(attrs={"class": "form-control"})
+        widget=forms.CheckboxSelectMultiple,  # Or use forms.SelectMultiple for dropdown
+        required=True,
+        label="Board Members"
     )
+
     class Meta:
         model = Board
-        fields = ['board_title', 'board_description', 'users']
+        fields = ['board_title', 'board_description', 'board_members']
 
 class ColumnForm(forms.ModelForm):
     class Meta:
